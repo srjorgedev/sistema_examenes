@@ -104,7 +104,7 @@ public class App {
                     Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
                     Interfaz.imprimirLineaConexion();
 
-                    Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre");
+                    Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
 
                     for (String usuarioString : usuarios) {
                         String[] usuarioDatos = usuarioString.split("\\.-\\.");
