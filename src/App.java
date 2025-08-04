@@ -13,6 +13,7 @@ public class App {
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
         Scanner scan = new Scanner(System.in);
+        //fvfgvrgrgrtg
         int opcionInicio, opcionAdmin, opcionEstudiante, opcionProfesor;
 
         // String txt =
