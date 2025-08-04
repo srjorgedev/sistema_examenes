@@ -4,22 +4,53 @@ import java.util.ArrayList;
 public class App {
     public static void main(String[] args) {
 
-        // Inicializar la interfaz de usuario
+        // Inicializar arrays con ArrayList
         ArrayList<String> usuarios = new ArrayList<>();
-        Datos.crearUsuarios(usuarios);
-        System.out.println("Usuarios creados: " + usuarios);
 
-        // Variables de usuario
+        // Crear datos de ejemplo
+        Datos.crearUsuarios(usuarios);
+
+        // Inicializar arrays
+        String[] usuariosArray = new String[99];
+        String[] historialUsuariosArray = new String[99];
+        String[] examenInfoArray = new String[99];
+        String[] examenPreguntasArray = new String[99];
+        String[] examenReactivosArray = new String[99];
+        String[] examenRespuestasArray = new String[99];
+
+        // Crear datos de ejemplo
+        Datos.crearUsuarios(usuariosArray);
+
+        // Variables de captura de datos del usuario
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
+        // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
-        //fvfgvrgrgrtg
+
+        // Variables para gestionar el flujo del sistema
         int opcionInicio, opcionAdmin, opcionEstudiante, opcionProfesor;
 
+        // Formato de incersion de datos a los arrays
         // String txt =
         // "HOLA.-.Me.-.LLAMO.-.JAVIER.-.Y.-.ESTOY.-.EN.-.JAVA.-.CON.-.UN.-.PROYECTO.-.DE.-.EXAMENES";
         // String[] palabras = txt.split("\\.-\\.");
         // System.out.println(palabras[2]);
+
+        /*
+         * Examen Info
+         * ID Nombre Fecha Tipo Materia Docente
+         * 00000001.-.Quimica 2.-.29/Julio/25.-.Ordinario.-.Quimica.-.Javier Perez
+         * 
+         * Examen Preguntas
+         * ID Preguntas
+         * 00000001.-.¿Quien fue Cristobal Colon?.-.¿Cuando se descubrio america?
+         * 
+         * Examen Reactivos
+         * 00000001.-.a) Mi padre b) Un puñetas c) Dios.-.a) Ayer b) Hoy c) Mañana
+         * 
+         * Examen Respuestas
+         * 00000001.-.a).-.b)c)
+         */
 
         do {
             System.out.println();
@@ -109,12 +140,15 @@ public class App {
                         String[] usuarioDatos = usuarioString.split("\\.-\\.");
 
                         for (int i = 0; i < usuarioDatos.length; i++) {
-                            if (i == 0) System.out.print("    ");
+                            if (i == 0)
+                                System.out.print("    ");
 
                             System.out.print(usuarioDatos[i] + "     ");
 
-                            if (i == usuarioDatos.length - 2) System.out.print("\t");
-                            if (i == usuarioDatos.length - 1) System.out.println();
+                            if (i == usuarioDatos.length - 2)
+                                System.out.print("\t");
+                            if (i == usuarioDatos.length - 1)
+                                System.out.println();
                         }
                     }
 
