@@ -23,9 +23,7 @@ public class App {
 
         do {
             System.out.println();
-            Interfaz.imprimirLineaSupIzqDer();
-            Interfaz.imprimirTextoLineaSalto("Bienvenido al sistema de examenes");
-            Interfaz.imprimirLineaConexion();
+            Interfaz.imprimirTitulo("Bienvenido al sistema de examenes");
             Interfaz.imprimirTextoLineaSalto("Seleccione su usuario:");
             Interfaz.imprimirBordeIzqDer();
             Interfaz.imprimirTextoLineaSalto("1. Administrador");

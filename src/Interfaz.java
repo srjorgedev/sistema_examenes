@@ -3,6 +3,12 @@ public class Interfaz {
     public static final String ANSI_RESET = "\u001B[0m";
     static int ancho = 60;
 
+    public static void imprimirTitulo(String titulo) {
+        imprimirLineaSupIzqDer();
+        imprimirTextoLineaSalto(titulo);
+        imprimirLineaConexion();
+    }
+
     public static void imprimirLineaSupIzqDer() {
         System.out.print(ANSI_BLUE + "  \u250C");
         for (int i = 0; i < ancho; i++) {
