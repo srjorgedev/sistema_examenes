@@ -1,6 +1,6 @@
 # Ignore compiled Java class files
 *.class
-./src/*.class
+/src/*.class
 
 # Ignore build directories
 /bin/
