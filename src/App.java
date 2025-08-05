@@ -25,7 +25,7 @@ public class App {
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
         // Variables de gestion del usuario actual
-        String usuarioActual;
+        String usuarioActual = "", usuarioSesionClave, usuarioSesionID;
 
         // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
@@ -78,10 +78,33 @@ public class App {
             if (opcionInicio == 4)
                 break;
 
-            while (opcionPanel == 1) {
+            while (usuarioActual.equals("")) {
                 System.out.println();
                 Interfaz.imprimirTitulo("Iniciar sesion");
+                Interfaz.imprimirBordeIzqDer();
+                System.out.print("    Usuario: ");
 
+                scan.nextLine();
+                usuarioSesionID = scan.nextLine();
+
+                System.out.print("    Clave: ");
+                usuarioSesionClave = scan.nextLine();
+
+                for (int i = 0; i < Array.usuariosIndice; i++) {
+                    if (usuariosArray[i].contains(usuarioSesionID)) {
+                        String[] usuarioDatos = usuariosArray[i].split(".-.");
+
+                        if (usuarioSesionClave.equals(usuarioDatos[usuarioDatos.length - 1])) {
+                            usuarioActual = usuarioSesionID;
+
+                            Interfaz.imprimirLineaConexion();
+                            Interfaz.imprimirTextoLineaSalto("Sesion iniciada");
+                            Interfaz.imprimirLineaInfIzqDer();
+
+                            break;
+                        }
+                    }
+                }
             }
 
             if (opcionInicio == 1) {
