@@ -1,5 +1,5 @@
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -23,6 +23,9 @@ public class App {
 
         // Variables de captura de datos del usuario
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
+
+        // Variables de gestion del usuario actual
+        String usuarioActual;
 
         // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
@@ -71,10 +74,15 @@ public class App {
                 System.out.print("  Ingrese su opcion: ");
                 opcionInicio = scan.nextInt();
             }
-            ;
 
             if (opcionInicio == 4)
                 break;
+
+            while (opcionPanel == 1) {
+                System.out.println();
+                Interfaz.imprimirTitulo("Iniciar sesion");
+
+            }
 
             if (opcionInicio == 1) {
                 while (opcionPanel == 0 || !(opcionPanel == 1 || opcionPanel == 2 || opcionPanel == 3)) {
@@ -143,7 +151,8 @@ public class App {
                         String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre
                                 + ".-."
                                 + usuarioPass;
-                        usuarios.add(nuevoUsuario);
+
+                        Array.agregarUsuario(usuariosArray, nuevoUsuario);
 
                         if (opcionPanelCrear == 2) {
                             opcionPanel = 0;
@@ -170,18 +179,18 @@ public class App {
 
                         Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
 
-                        for (String usuarioString : usuarios) {
-                            String[] usuarioDatos = usuarioString.split("\\.-\\.");
+                        for (int i = 0; i < Array.usuariosIndice; i++) {
+                            String[] usuarioDatos = usuariosArray[i].split("\\.-\\.");
 
-                            for (int i = 0; i < usuarioDatos.length; i++) {
-                                if (i == 0)
+                            for (int j = 0; j < usuarioDatos.length; j++) {
+                                if (j == 0)
                                     System.out.print("    ");
 
-                                System.out.print(usuarioDatos[i] + "     ");
+                                System.out.print(usuarioDatos[j] + "     ");
 
-                                if (i == usuarioDatos.length - 2)
+                                if (j == usuarioDatos.length - 2)
                                     System.out.print("\t");
-                                if (i == usuarioDatos.length - 1)
+                                if (j == usuarioDatos.length - 1)
                                     System.out.println();
                             }
                         }
@@ -218,7 +227,7 @@ public class App {
             }
 
         }
-        
+
         scan.close();
     }
 }
