@@ -28,7 +28,8 @@ public class App {
         Scanner scan = new Scanner(System.in);
 
         // Variables para gestionar el flujo del sistema
-        int opcionInicio, opcionAdmin, opcionEstudiante, opcionProfesor;
+        int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0, opcionEstudiante = 0,
+                opcionProfesor = 0, opcionAdministrar = 0;
 
         // Formato de incersion de datos a los arrays
         // String txt =
@@ -52,119 +53,172 @@ public class App {
          * 00000001.-.a).-.b)c)
          */
 
-        do {
-            System.out.println();
-            Interfaz.imprimirTitulo("Bienvenido al sistema de examenes");
-            Interfaz.imprimirTextoLineaSalto("Seleccione su usuario:");
-            Interfaz.imprimirBordeIzqDer();
-            Interfaz.imprimirTextoLineaSalto("1. Administrador");
-            Interfaz.imprimirTextoLineaSalto("2. Estudiante");
-            Interfaz.imprimirTextoLineaSalto("3. Profesor");
-            Interfaz.imprimirBordeIzqDer();
-            Interfaz.imprimirLineaInfIzqDer();
-
-            System.out.print("  Ingrese su opcion: ");
-            opcionInicio = scan.nextInt();
-        } while (!(opcionInicio == 1 || opcionInicio == 2 || opcionInicio == 3));
-
-        if (opcionInicio == 1) {
-            do {
+        while (true) {
+            while (opcionInicio == 0
+                    || !(opcionInicio == 1 || opcionInicio == 2 || opcionInicio == 3 || opcionInicio == 4)) {
                 System.out.println();
-                Interfaz.imprimirLineaSupIzqDer();
-                Interfaz.imprimirTextoLineaSalto("Panel de Administrador");
-                Interfaz.imprimirLineaConexion();
-                Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+                Interfaz.imprimirTitulo("Bienvenido al sistema de examenes");
+                Interfaz.imprimirTextoLineaSalto("Seleccione su usuario:");
                 Interfaz.imprimirBordeIzqDer();
-                Interfaz.imprimirTextoLineaSalto("1. Crear usuarios");
-                Interfaz.imprimirTextoLineaSalto("2. Administrar usuarios");
-
+                Interfaz.imprimirTextoLineaSalto("1. Administrador");
+                Interfaz.imprimirTextoLineaSalto("2. Estudiante");
+                Interfaz.imprimirTextoLineaSalto("3. Profesor");
+                Interfaz.imprimirBordeIzqDer();
+                Interfaz.imprimirTextoLineaSalto("4. Salir del sistema");
                 Interfaz.imprimirBordeIzqDer();
                 Interfaz.imprimirLineaInfIzqDer();
 
                 System.out.print("  Ingrese su opcion: ");
-                opcionAdmin = scan.nextInt();
-            } while (!(opcionAdmin == 1 || opcionAdmin == 2));
+                opcionInicio = scan.nextInt();
+            }
+            ;
 
-            if (opcionAdmin == 1) {
-                do {
-                    usuarioId = "0".repeat(8 - String.valueOf(usuarios.size()).length()) + usuarios.size();
+            if (opcionInicio == 4)
+                break;
 
+            if (opcionInicio == 1) {
+                while (opcionPanel == 0 || !(opcionPanel == 1 || opcionPanel == 2 || opcionPanel == 3)) {
                     System.out.println();
                     Interfaz.imprimirLineaSupIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("Crear Usuario");
+                    Interfaz.imprimirTextoLineaSalto("Panel de Administrador");
                     Interfaz.imprimirLineaConexion();
-
-                    Interfaz.imprimirTextoLineaSalto("ID: " + usuarioId);
-                    do {
-                        Interfaz.imprimirTextoLineaSalto("Tipo -> (E)studiante     (D)ocente");
-                        System.out.print("    Tipo: ");
-                        scan.nextLine();
-                        usuarioTipo = scan.nextLine();
-                    } while (!(usuarioTipo.equals("D") || usuarioTipo.equals("E")
-                            || (usuarioTipo.equals("d") || usuarioTipo.equals("e"))));
-
-                    System.out.print("    Nombre: ");
-                    usuarioNombre = scan.nextLine();
-
-                    System.out.print("    Contraseña: ");
-                    usuarioPass = scan.nextLine();
-
-                    Interfaz.imprimirLineaConexion();
-                    Interfaz.imprimirTextoLineaSalto("Usuario creado.");
-                    Interfaz.imprimirLineaConexion();
-                    Interfaz.imprimirTextoLineaSalto("1. Crear otro usuario");
-                    Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
+                    Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+                    Interfaz.imprimirBordeIzqDer();
+                    Interfaz.imprimirTextoLineaSalto("1. Crear usuarios");
+                    Interfaz.imprimirTextoLineaSalto("2. Administrar usuarios");
+                    Interfaz.imprimirBordeIzqDer();
                     Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
 
+                    Interfaz.imprimirBordeIzqDer();
                     Interfaz.imprimirLineaInfIzqDer();
 
                     System.out.print("  Ingrese su opcion: ");
-                    opcionEstudiante = scan.nextInt();
+                    opcionPanel = scan.nextInt();
 
-                    String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre + ".-."
-                            + usuarioPass;
-                    usuarios.add(nuevoUsuario);
-                } while (opcionEstudiante > 0 && opcionEstudiante < 2);
-            }
+                    if (opcionPanel == 3) {
+                        opcionInicio = 0;
+                        opcionPanel = 0;
+                        break;
+                    }
+                }
+                ;
 
-            if (opcionAdmin == 2) {
-                do {
-                    System.out.println();
-                    Interfaz.imprimirLineaSupIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
-                    Interfaz.imprimirLineaConexion();
+                if (opcionPanel == 1) {
+                    while (opcionPanelCrear == 0
+                            || !(opcionPanelCrear == 1 || opcionPanelCrear == 2 || opcionPanelCrear == 3)) {
+                        usuarioId = "0".repeat(8 - String.valueOf(usuarios.size()).length()) + usuarios.size();
 
-                    Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
+                        System.out.println();
+                        Interfaz.imprimirLineaSupIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("Crear Usuario");
+                        Interfaz.imprimirLineaConexion();
 
-                    for (String usuarioString : usuarios) {
-                        String[] usuarioDatos = usuarioString.split("\\.-\\.");
+                        Interfaz.imprimirTextoLineaSalto("ID: " + usuarioId);
+                        do {
+                            Interfaz.imprimirTextoLineaSalto("Tipo -> (E)studiante     (D)ocente");
+                            System.out.print("    Tipo: ");
+                            scan.nextLine();
+                            usuarioTipo = scan.nextLine();
+                        } while (!(usuarioTipo.equals("D") || usuarioTipo.equals("E")
+                                || (usuarioTipo.equals("d") || usuarioTipo.equals("e"))));
 
-                        for (int i = 0; i < usuarioDatos.length; i++) {
-                            if (i == 0)
-                                System.out.print("    ");
+                        System.out.print("    Nombre: ");
+                        usuarioNombre = scan.nextLine();
 
-                            System.out.print(usuarioDatos[i] + "     ");
+                        System.out.print("    Clave: ");
+                        usuarioPass = scan.nextLine();
 
-                            if (i == usuarioDatos.length - 2)
-                                System.out.print("\t");
-                            if (i == usuarioDatos.length - 1)
-                                System.out.println();
+                        Interfaz.imprimirLineaConexion();
+                        Interfaz.imprimirTextoLineaSalto("Usuario creado.");
+                        Interfaz.imprimirLineaConexion();
+                        Interfaz.imprimirTextoLineaSalto("1. Crear otro usuario");
+                        Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
+                        Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+
+                        Interfaz.imprimirLineaInfIzqDer();
+
+                        System.out.print("  Ingrese su opcion: ");
+                        opcionPanelCrear = scan.nextInt();
+
+                        String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre
+                                + ".-."
+                                + usuarioPass;
+                        usuarios.add(nuevoUsuario);
+
+                        if (opcionPanelCrear == 2) {
+                            opcionPanel = 0;
+                            opcionPanelCrear = 0;
+                            break;
+                        }
+                        if (opcionPanelCrear == 3) {
+                            opcionInicio = 0;
+                            opcionPanel = 0;
+                            opcionPanelCrear = 0;
+                            break;
                         }
                     }
+                    ;
+                }
 
-                    Interfaz.imprimirTextoLineaSalto("1. Crear otro usuario");
-                    Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
-                    Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+                if (opcionPanel == 2) {
+                    while (opcionAdministrar == 0
+                            || !(opcionAdministrar == 1 || opcionAdministrar == 2 || opcionAdministrar == 3)) {
+                        System.out.println();
+                        Interfaz.imprimirLineaSupIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
+                        Interfaz.imprimirLineaConexion();
 
-                    Interfaz.imprimirLineaInfIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
 
-                    System.out.print("  Ingrese su opcion: ");
-                    opcionEstudiante = scan.nextInt();
+                        for (String usuarioString : usuarios) {
+                            String[] usuarioDatos = usuarioString.split("\\.-\\.");
 
-                } while (opcionEstudiante > 0 && opcionEstudiante < 2);
+                            for (int i = 0; i < usuarioDatos.length; i++) {
+                                if (i == 0)
+                                    System.out.print("    ");
+
+                                System.out.print(usuarioDatos[i] + "     ");
+
+                                if (i == usuarioDatos.length - 2)
+                                    System.out.print("\t");
+                                if (i == usuarioDatos.length - 1)
+                                    System.out.println();
+                            }
+                        }
+
+                        Interfaz.imprimirBordeIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+                        Interfaz.imprimirTextoLineaSalto("1. Modificar usuario");
+                        Interfaz.imprimirTextoLineaSalto("2. Eliminar usuario");
+
+                        Interfaz.imprimirBordeIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("3. Volver al panel de administrador");
+                        Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+                        Interfaz.imprimirBordeIzqDer();
+
+                        Interfaz.imprimirLineaInfIzqDer();
+
+                        System.out.print("  Ingrese su opcion: ");
+                        opcionAdministrar = scan.nextInt();
+
+                        if (opcionAdministrar == 3) {
+                            opcionPanel = 0;
+                            opcionAdministrar = 0;
+                            break;
+                        }
+                        if (opcionAdministrar == 4) {
+                            opcionInicio = 0;
+                            opcionPanel = 0;
+                            opcionAdministrar = 0;
+                            break;
+                        }
+                    }
+                    ;
+                }
             }
-        }
 
+        }
+        
         scan.close();
     }
 }
