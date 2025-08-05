@@ -5,11 +5,13 @@ public class App {
     public static void main(String[] args) {
 
         // Inicializar arrays con ArrayList
-        ArrayList<String> usuarios = new ArrayList<>();
+        ArrayList<UsuariosDatos> usuarios = new ArrayList<>();
         ArrayList<Examen> examenes = new ArrayList<>();
 
         // Crear datos de ejemplo
         Datos.crearUsuarios(usuarios);
+
+        System.out.println((UsuariosDatos) usuarios.get(1));
 
         // Inicializar arrays
         String[] usuariosArray = new String[99];
@@ -34,12 +36,6 @@ public class App {
         // Variables para gestionar el flujo del sistema
         int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0, opcionEstudiante = 0,
                 opcionProfesor = 0, opcionAdministrar = 0;
-
-        // Formato de incersion de datos a los arrays
-        // String txt =
-        // "HOLA.-.Me.-.LLAMO.-.JAVIER.-.Y.-.ESTOY.-.EN.-.JAVA.-.CON.-.UN.-.PROYECTO.-.DE.-.EXAMENES";
-        // String[] palabras = txt.split("\\.-\\.");
-        // System.out.println(palabras[2]);
 
         /*
          * Examen Info
@@ -158,7 +154,6 @@ public class App {
                         String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre
                                 + ".-."
                                 + usuarioPass;
-                        usuarios.add(nuevoUsuario);
 
                         if (opcionPanelCrear == 2) {
                             opcionPanel = 0;
@@ -184,21 +179,21 @@ public class App {
 
                         Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
 
-                        for (String usuarioString : usuarios) {
-                            String[] usuarioDatos = usuarioString.split("\\.-\\.");
+                        // for (String usuarioString : usuarios) {
+                        // String[] usuarioDatos = usuarioString.split("\\.-\\.");
 
-                            for (int i = 0; i < usuarioDatos.length; i++) {
-                                if (i == 0)
-                                    System.out.print("    ");
+                        // for (int i = 0; i < usuarioDatos.length; i++) {
+                        // if (i == 0)
+                        // System.out.print(" ");
 
-                                System.out.print(usuarioDatos[i] + "     ");
+                        // System.out.print(usuarioDatos[i] + " ");
 
-                                if (i == usuarioDatos.length - 2)
-                                    System.out.print("\t");
-                                if (i == usuarioDatos.length - 1)
-                                    System.out.println();
-                            }
-                        }
+                        // if (i == usuarioDatos.length - 2)
+                        // System.out.print("\t");
+                        // if (i == usuarioDatos.length - 1)
+                        // System.out.println();
+                        // }
+                        // }
 
                         Interfaz.imprimirBordeIzqDer();
                         Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
