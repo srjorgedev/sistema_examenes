@@ -141,8 +141,8 @@ public class App {
                         opcionPanelCrear = scan.nextInt();
 
                         String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre
-                                + ".-."
-                                + usuarioPass;
+                                + ".-." + usuarioPass;
+                                
                         usuarios.add(nuevoUsuario);
 
                         if (opcionPanelCrear == 2) {
@@ -218,7 +218,7 @@ public class App {
             }
 
         }
-        
+
         scan.close();
     }
 }
