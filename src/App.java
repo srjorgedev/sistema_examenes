@@ -11,31 +11,30 @@ public class App {
         // Crear datos de ejemplo
         Datos.crearUsuarios(usuarios);
 
-        System.out.println((UsuariosDatos) usuarios.get(1));
-
+        /* Sin usar */
         // Inicializar arrays
-        String[] usuariosArray = new String[99];
-        String[] historialUsuariosArray = new String[99];
-        String[] examenInfoArray = new String[99];
-        String[] examenPreguntasArray = new String[99];
-        String[] examenReactivosArray = new String[99];
-        String[] examenRespuestasArray = new String[99];
+        // String[] usuariosArray = new String[99];
+        // String[] historialUsuariosArray = new String[99];
+        // String[] examenInfoArray = new String[99];
+        // String[] examenPreguntasArray = new String[99];
+        // String[] examenReactivosArray = new String[99];
+        // String[] examenRespuestasArray = new String[99];
 
-        // Crear datos de ejemplo
-        Datos.crearUsuarios(usuariosArray);
+        // // Crear datos de ejemplo
+        // Datos.crearUsuarios(usuariosArray);
 
         // Variables de captura de datos del usuario
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
         // Variables de gestion del usuario actual
-        String usuarioActual;
+        String usuarioSesionActual = "", usuarioSesionClave = "", usuarioSesionID = "", usuarioSesionNombre = "";
 
         // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
 
         // Variables para gestionar el flujo del sistema
         int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0, opcionEstudiante = 0,
-                opcionProfesor = 0, opcionAdministrar = 0;
+                opcionProfesor = 0, opcionAdministrar = 0, opcionIniciarSesion = 0;
 
         /*
          * Examen Info
@@ -76,10 +75,49 @@ public class App {
             if (opcionInicio == 4)
                 break;
 
-            while (opcionPanel == 1) {
+            while (usuarioSesionActual.isEmpty()) {
+                boolean usuarioEncontrado = false;
+
                 System.out.println();
                 Interfaz.imprimirTitulo("Iniciar sesion");
+                Interfaz.imprimirBordeIzqDer();
 
+                System.out.print("    Usuario: ");
+                scan.nextLine(); // Limpiar el buffer del scanner
+                usuarioSesionID = scan.nextLine();
+
+                System.out.print("    Clave: ");
+                usuarioSesionClave = scan.nextLine();
+
+                for (UsuariosDatos usuario : usuarios) {
+                    if (usuario.id.equals(usuarioSesionID) && usuario.clave.equals(usuarioSesionClave)) {
+                        usuarioSesionActual = usuario.id;
+                        usuarioEncontrado = true;
+                    }
+                }
+
+                Interfaz.imprimirBordeIzqDer();
+                Interfaz.imprimirLineaConexion();
+
+                if (usuarioEncontrado) {
+                    Interfaz.imprimirTextoLineaSalto("Sesion iniciada.");
+                    Interfaz.imprimirLineaInfIzqDer();
+                    break;
+                }
+
+                Interfaz.imprimirTextoLineaSalto("Usuario o clave incorrectos.");
+                Interfaz.imprimirLineaConexion();
+                Interfaz.imprimirTextoLineaSalto("1. Intentar de nuevo");
+                Interfaz.imprimirTextoLineaSalto("2. Volver al inicio");
+                Interfaz.imprimirLineaInfIzqDer();
+
+                System.out.print("  Ingrese su opcion: ");
+                opcionIniciarSesion = scan.nextInt();
+                if (opcionIniciarSesion == 2) {
+                    opcionInicio = 0;
+                    opcionIniciarSesion = 0;
+                    break;
+                }
             }
 
             if (opcionInicio == 1) {
@@ -98,7 +136,7 @@ public class App {
                     Interfaz.imprimirBordeIzqDer();
                     Interfaz.imprimirLineaInfIzqDer();
 
-                    System.out.print("  Ingrese su opcion: ");
+                    System.out.print("  \nIngrese su opcion: ");
                     opcionPanel = scan.nextInt();
 
                     if (opcionPanel == 3) {
@@ -151,10 +189,7 @@ public class App {
                         System.out.print("  Ingrese su opcion: ");
                         opcionPanelCrear = scan.nextInt();
 
-                        String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-." + usuarioNombre
-                                + ".-."
-                                + usuarioPass;
-                        usuarios.add(nuevoUsuario);
+                        usuarios.add(new UsuariosDatos(usuarioId, usuarioTipo, usuarioNombre, usuarioPass));
 
                         if (opcionPanelCrear == 2) {
                             opcionPanel = 0;
@@ -178,23 +213,13 @@ public class App {
                         Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
                         Interfaz.imprimirLineaConexion();
 
-                        Interfaz.imprimirTextoLineaSalto("Tipo  ID           Nombre     \tClave");
+                        Interfaz.imprimirTextoLineaSalto("Tipo    ID       Nombre               Clave");
 
-                        // for (String usuarioString : usuarios) {
-                        // String[] usuarioDatos = usuarioString.split("\\.-\\.");
-
-                        // for (int i = 0; i < usuarioDatos.length; i++) {
-                        // if (i == 0)
-                        // System.out.print(" ");
-
-                        // System.out.print(usuarioDatos[i] + " ");
-
-                        // if (i == usuarioDatos.length - 2)
-                        // System.out.print("\t");
-                        // if (i == usuarioDatos.length - 1)
-                        // System.out.println();
-                        // }
-                        // }
+                        for (UsuariosDatos usuario : usuarios) {
+                            String usuarioTexto = "  " + usuario.rol.toUpperCase() + "     " + usuario.id + " "
+                                    + usuario.nombre + " \t\t" + usuario.clave;
+                            Interfaz.imprimirTextoLineaSalto(usuarioTexto);
+                        }
 
                         Interfaz.imprimirBordeIzqDer();
                         Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
@@ -210,6 +235,7 @@ public class App {
 
                         System.out.print("  Ingrese su opcion: ");
                         opcionAdministrar = scan.nextInt();
+                        scan.nextLine();
 
                         if (opcionAdministrar == 3) {
                             opcionPanel = 0;
@@ -223,7 +249,73 @@ public class App {
                             break;
                         }
                     }
-                    ;
+                    
+                    if (opcionAdministrar == 1) {
+                        Interfaz.imprimirTitulo("Modificar Usuario");
+                        Interfaz.imprimirTextoLineaSalto("Nota: Si un campo no sera modificado, dejar en blanco.");
+                        System.out.print("    ID: ");
+
+                        String idModificar = scan.nextLine();
+
+                        boolean usuarioEncontrado = false;
+
+                        for (UsuariosDatos usuario : usuarios) {
+                            if (usuario.id.equals(idModificar)) {
+                                usuarioEncontrado = true;
+                                Interfaz.imprimirLineaConexion();
+
+                                Interfaz.imprimirTextoLineaSalto("Usuario encontrado, datos: ");
+                                Interfaz.imprimirTextoLineaSalto("Nombre: " + usuario.nombre);
+                                Interfaz.imprimirTextoLineaSalto("Clave: " + usuario.clave);
+                                Interfaz.imprimirTextoLineaSalto("Tipo: " + usuario.rol.toUpperCase());
+                                Interfaz.imprimirLineaConexion();
+
+                                System.out.print("    Nuevo nombre: ");
+                                String nuevoNombre = scan.nextLine();
+
+                                System.out.print("    Nueva clave: ");
+                                String nuevaClave = scan.nextLine();
+
+                                if (!nuevoNombre.isEmpty())
+                                    usuario.nombre = nuevoNombre;
+                                if (!nuevaClave.isEmpty())
+                                    usuario.clave = nuevaClave;
+
+                                Interfaz.imprimirLineaConexion();
+                                Interfaz.imprimirTextoLineaSalto("Usuario modificado correctamente.");
+                                break;
+                            }
+                        }
+
+                        Interfaz.imprimirLineaConexion();
+                        if (!usuarioEncontrado) {
+                            Interfaz.imprimirTextoLineaSalto("Usuario no encontrado.");
+                            Interfaz.imprimirLineaInfIzqDer();
+                        }
+                        if (usuarioEncontrado) {
+                            Interfaz.imprimirTextoLineaSalto("1. Modificar otro usuario");
+                            Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
+                            Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+
+                            Interfaz.imprimirLineaInfIzqDer();
+
+                            System.out.print("  Ingrese su opcion: ");
+                            opcionAdministrar = scan.nextInt();
+                            scan.nextLine();
+
+                            if (opcionAdministrar == 2) {
+                                opcionPanel = 0;
+                                opcionAdministrar = 0;
+                                break;
+                            }
+                            if (opcionAdministrar == 3) {
+                                opcionInicio = 0;
+                                opcionPanel = 0;
+                                opcionAdministrar = 0;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
