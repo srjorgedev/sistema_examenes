@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -29,7 +28,8 @@ public class App {
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
         // Variables de gestion del usuario actual
-        String usuarioSesionActual = "", usuarioSesionClave = "", usuarioSesionID = "", usuarioSesionNombre = "";
+        String usuarioSesionActual = "", usuarioSesionClave = "", usuarioSesionID = "", usuarioSesionNombre = "",
+                usuarioSesionTipo = "";
 
         // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
@@ -96,6 +96,8 @@ public class App {
 
                     if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
                         usuarioEncontrado = true;
+
+                        usuarioSesionTipo = datos[1];
                         usuarioSesionActual = datos[0];
                         usuarioSesionNombre = datos[2];
                         break;
@@ -307,7 +309,20 @@ public class App {
                         Interfaz.imprimirLineaConexion();
                         if (!usuarioEncontrado) {
                             Interfaz.imprimirTextoLineaSalto("Usuario no encontrado.");
+                            Interfaz.imprimirLineaConexion();
+                            Interfaz.imprimirTextoLineaSalto("1. Intentar otra vez");
+                            Interfaz.imprimirTextoLineaSalto("2. Salir");
                             Interfaz.imprimirLineaInfIzqDer();
+
+                            System.out.print("  Ingrese su opcion: ");
+                            opcionAdministrar = scan.nextInt();
+                            scan.nextLine();
+
+                            if (opcionAdministrar == 2) {
+                                opcionInicio = 1;
+                                opcionPanel = 0;
+                                opcionAdministrar = 0;
+                            }
                         }
                         if (usuarioEncontrado) {
                             Interfaz.imprimirTextoLineaSalto("1. Modificar otro usuario");
