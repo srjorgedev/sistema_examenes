@@ -3,11 +3,11 @@ public class Array {
      * Por temas de consumo de recursos
      * ArrayusuariosIndice y similares admiten hasta 99 elementos
      */
-    static int usuariosIndice = 0;
+    static int usuariosIndiceActual = 0;
     
     public static void agregarUsuario(String[] array, String datos) {
-        array[usuariosIndice] = datos;
-        usuariosIndice++;
+        array[usuariosIndiceActual] = datos;
+        usuariosIndiceActual++;
     }
 
     public static void agregar(String[] array,int indice, String datos) {

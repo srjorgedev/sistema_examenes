@@ -5,23 +5,25 @@ public class App {
     public static void main(String[] args) {
 
         // Inicializar arrays con ArrayList
-        ArrayList<UsuariosDatos> usuarios = new ArrayList<>();
-        ArrayList<Examen> examenes = new ArrayList<>();
+        // ArrayList<UsuariosDatos> usuarios = new ArrayList<>();
+        // ArrayList<Examen> examenes = new ArrayList<>();
 
         // Crear datos de ejemplo
-        Datos.crearUsuarios(usuarios);
+        // Datos.crearUsuarios(usuarios);
+
+        String regex = "\\.-\\.";
 
         /* Sin usar */
         // Inicializar arrays
-        // String[] usuariosArray = new String[99];
-        // String[] historialUsuariosArray = new String[99];
-        // String[] examenInfoArray = new String[99];
-        // String[] examenPreguntasArray = new String[99];
-        // String[] examenReactivosArray = new String[99];
-        // String[] examenRespuestasArray = new String[99];
+        String[] usuariosArray = new String[99];
+        String[] historialUsuariosArray = new String[99];
+        String[] examenInfoArray = new String[99];
+        String[] examenPreguntasArray = new String[99];
+        String[] examenReactivosArray = new String[99];
+        String[] examenRespuestasArray = new String[99];
 
         // // Crear datos de ejemplo
-        // Datos.crearUsuarios(usuariosArray);
+        Datos.crearUsuarios(usuariosArray);
 
         // Variables de captura de datos del usuario
         String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
@@ -89,10 +91,14 @@ public class App {
                 System.out.print("    Clave: ");
                 usuarioSesionClave = scan.nextLine();
 
-                for (UsuariosDatos usuario : usuarios) {
-                    if (usuario.id.equals(usuarioSesionID) && usuario.clave.equals(usuarioSesionClave)) {
-                        usuarioSesionActual = usuario.id;
+                for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                    String[] datos = usuariosArray[i].split(regex);
+
+                    if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
                         usuarioEncontrado = true;
+                        usuarioSesionActual = datos[0];
+                        usuarioSesionNombre = datos[2];
+                        break;
                     }
                 }
 
@@ -150,7 +156,8 @@ public class App {
                 if (opcionPanel == 1) {
                     while (opcionPanelCrear == 0
                             || !(opcionPanelCrear == 1 || opcionPanelCrear == 2 || opcionPanelCrear == 3)) {
-                        usuarioId = "0".repeat(8 - String.valueOf(usuarios.size()).length()) + usuarios.size();
+                        usuarioId = "0".repeat(8 - String.valueOf(Array.usuariosIndiceActual).length())
+                                + Array.usuariosIndiceActual;
 
                         System.out.println();
                         Interfaz.imprimirLineaSupIzqDer();
@@ -189,7 +196,10 @@ public class App {
                         System.out.print("  Ingrese su opcion: ");
                         opcionPanelCrear = scan.nextInt();
 
-                        usuarios.add(new UsuariosDatos(usuarioId, usuarioTipo, usuarioNombre, usuarioPass));
+                        String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-."
+                                + usuarioNombre + ".-." + usuarioPass;
+
+                        Array.agregarUsuario(usuariosArray, nuevoUsuario);
 
                         if (opcionPanelCrear == 2) {
                             opcionPanel = 0;
@@ -215,9 +225,10 @@ public class App {
 
                         Interfaz.imprimirTextoLineaSalto("Tipo    ID       Nombre               Clave");
 
-                        for (UsuariosDatos usuario : usuarios) {
-                            String usuarioTexto = "  " + usuario.rol.toUpperCase() + "     " + usuario.id + " "
-                                    + usuario.nombre + " \t\t" + usuario.clave;
+                        for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                            String[] datos = usuariosArray[i].split(regex);
+                            String usuarioTexto = "  " + datos[0] + "     " + datos[1] + " "
+                                    + datos[2] + " \t\t" + datos[3];
                             Interfaz.imprimirTextoLineaSalto(usuarioTexto);
                         }
 
@@ -249,7 +260,7 @@ public class App {
                             break;
                         }
                     }
-                    
+
                     if (opcionAdministrar == 1) {
                         Interfaz.imprimirTitulo("Modificar Usuario");
                         Interfaz.imprimirTextoLineaSalto("Nota: Si un campo no sera modificado, dejar en blanco.");
@@ -259,15 +270,17 @@ public class App {
 
                         boolean usuarioEncontrado = false;
 
-                        for (UsuariosDatos usuario : usuarios) {
-                            if (usuario.id.equals(idModificar)) {
+                        for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                            String[] datos = usuariosArray[i].split(regex);
+
+                            if (datos[1].equals(idModificar)) {
                                 usuarioEncontrado = true;
                                 Interfaz.imprimirLineaConexion();
 
                                 Interfaz.imprimirTextoLineaSalto("Usuario encontrado, datos: ");
-                                Interfaz.imprimirTextoLineaSalto("Nombre: " + usuario.nombre);
-                                Interfaz.imprimirTextoLineaSalto("Clave: " + usuario.clave);
-                                Interfaz.imprimirTextoLineaSalto("Tipo: " + usuario.rol.toUpperCase());
+                                Interfaz.imprimirTextoLineaSalto("Nombre: " + datos[2]);
+                                Interfaz.imprimirTextoLineaSalto("Clave: " + datos[3]);
+                                Interfaz.imprimirTextoLineaSalto("Tipo: " + datos[0].toUpperCase());
                                 Interfaz.imprimirLineaConexion();
 
                                 System.out.print("    Nuevo nombre: ");
@@ -277,14 +290,18 @@ public class App {
                                 String nuevaClave = scan.nextLine();
 
                                 if (!nuevoNombre.isEmpty())
-                                    usuario.nombre = nuevoNombre;
+                                    datos[2] = nuevoNombre;
                                 if (!nuevaClave.isEmpty())
-                                    usuario.clave = nuevaClave;
+                                    datos[3] = nuevaClave;
+
+                                String nuevoUsuario = datos[0] + ".-." + datos[1] + ".-." + datos[2] + ".-." + datos[3];
+                                Array.modificar(usuariosArray, i, nuevoUsuario);
 
                                 Interfaz.imprimirLineaConexion();
                                 Interfaz.imprimirTextoLineaSalto("Usuario modificado correctamente.");
                                 break;
                             }
+
                         }
 
                         Interfaz.imprimirLineaConexion();
@@ -304,108 +321,107 @@ public class App {
                             scan.nextLine();
 
                             if (opcionAdministrar == 2) {
+                                opcionInicio = 1;
                                 opcionPanel = 0;
                                 opcionAdministrar = 0;
-                                break;
                             }
                             if (opcionAdministrar == 3) {
                                 opcionInicio = 0;
                                 opcionPanel = 0;
                                 opcionAdministrar = 0;
-                                break;
                             }
                         }
                     }
                 }
             }
 
-            if (opcionInicio == 2) {
-                int opcionDocente = 0;
-                while (opcionDocente != 3) {
-                    System.out.println("Panel Docente");
-                    System.out.println("1. Crear examen");
-                    System.out.println("2. Ver exámenes");
-                    System.out.println("3. Volver");
-                    System.out.print("Opción: ");
-                    opcionDocente = scan.nextInt();
-                    scan.nextLine(); // limpiar buffer
+            // if (opcionInicio == 2) {
+            // int opcionDocente = 0;
+            // while (opcionDocente != 3) {
+            // System.out.println("Panel Docente");
+            // System.out.println("1. Crear examen");
+            // System.out.println("2. Ver exámenes");
+            // System.out.println("3. Volver");
+            // System.out.print("Opción: ");
+            // opcionDocente = scan.nextInt();
+            // scan.nextLine(); // limpiar buffer
 
-                    if (opcionDocente == 1) {
-                        System.out.println("Crear Examen");
-                        String id = "EX" + (examenes.size() + 1);
-                        System.out.print("Nombre del examen: ");
-                        String nombre = scan.nextLine();
-                        System.out.print("Fecha (ej: 29/Julio/25): ");
-                        String fecha = scan.nextLine();
-                        System.out.print("Tipo (ej: Ordinario): ");
-                        String tipo = scan.nextLine();
-                        System.out.print("Materia: ");
-                        String materia = scan.nextLine();
-                        System.out.print("Nombre del docente: ");
-                        String docente = scan.nextLine();
+            // if (opcionDocente == 1) {
+            // System.out.println("Crear Examen");
+            // String id = "EX" + (examenes.size() + 1);
+            // System.out.print("Nombre del examen: ");
+            // String nombre = scan.nextLine();
+            // System.out.print("Fecha (ej: 29/Julio/25): ");
+            // String fecha = scan.nextLine();
+            // System.out.print("Tipo (ej: Ordinario): ");
+            // String tipo = scan.nextLine();
+            // System.out.print("Materia: ");
+            // String materia = scan.nextLine();
+            // System.out.print("Nombre del docente: ");
+            // String docente = scan.nextLine();
 
-                        Examen examen = new Examen(id, nombre, fecha, tipo, materia, docente);
+            // Examen examen = new Examen(id, nombre, fecha, tipo, materia, docente);
 
-                        // Agregar preguntas
-                        while (true) {
-                            System.out.print("¿Agregar una pregunta? (s/n): ");
-                            String resp = scan.nextLine();
-                            if (!resp.equalsIgnoreCase("s"))
-                                break;
+            // // Agregar preguntas
+            // while (true) {
+            // System.out.print("¿Agregar una pregunta? (s/n): ");
+            // String resp = scan.nextLine();
+            // if (!resp.equalsIgnoreCase("s"))
+            // break;
 
-                            System.out.print("Pregunta: ");
-                            String pregunta = scan.nextLine();
+            // System.out.print("Pregunta: ");
+            // String pregunta = scan.nextLine();
 
-                            ArrayList<String> opciones = new ArrayList<>();
-                            char letra = 'a';
-                            boolean agregarOtraOpcion = true;
-                            while (agregarOtraOpcion) {
-                                System.out.print("Opción " + letra + ": ");
-                                opciones.add(scan.nextLine());
-                                if (letra >= 'c') {
-                                    System.out.print("¿Desea agregar otra opción? (s/n): ");
-                                    String masOpc = scan.nextLine();
-                                    if (!masOpc.equalsIgnoreCase("s")) {
-                                        agregarOtraOpcion = false;
-                                    } else {
-                                        letra++;
-                                    }
-                                } else {
-                                    letra++;
-                                }
-                            }
+            // ArrayList<String> opciones = new ArrayList<>();
+            // char letra = 'a';
+            // boolean agregarOtraOpcion = true;
+            // while (agregarOtraOpcion) {
+            // System.out.print("Opción " + letra + ": ");
+            // opciones.add(scan.nextLine());
+            // if (letra >= 'c') {
+            // System.out.print("¿Desea agregar otra opción? (s/n): ");
+            // String masOpc = scan.nextLine();
+            // if (!masOpc.equalsIgnoreCase("s")) {
+            // agregarOtraOpcion = false;
+            // } else {
+            // letra++;
+            // }
+            // } else {
+            // letra++;
+            // }
+            // }
 
-                            // Mostrar letras válidas para la respuesta correcta
-                            StringBuilder letrasValidas = new StringBuilder();
-                            for (char l = 'a'; l < 'a' + opciones.size(); l++) {
-                                letrasValidas.append(l);
-                                if (l < 'a' + opciones.size() - 1)
-                                    letrasValidas.append("/");
-                            }
-                            System.out.print("Respuesta correcta (" + letrasValidas + "): ");
-                            String correcta = scan.nextLine();
+            // // Mostrar letras válidas para la respuesta correcta
+            // StringBuilder letrasValidas = new StringBuilder();
+            // for (char l = 'a'; l < 'a' + opciones.size(); l++) {
+            // letrasValidas.append(l);
+            // if (l < 'a' + opciones.size() - 1)
+            // letrasValidas.append("/");
+            // }
+            // System.out.print("Respuesta correcta (" + letrasValidas + "): ");
+            // String correcta = scan.nextLine();
 
-                            Pregunta nuevaPregunta = new Pregunta(pregunta, opciones, correcta);
-                            examen.preguntas.add(nuevaPregunta);
-                        }
+            // Pregunta nuevaPregunta = new Pregunta(pregunta, opciones, correcta);
+            // examen.preguntas.add(nuevaPregunta);
+            // }
 
-                        examenes.add(examen);
-                        System.out.println("Examen creado correctamente.");
-                    }
+            // examenes.add(examen);
+            // System.out.println("Examen creado correctamente.");
+            // }
 
-                    if (opcionDocente == 2) {
-                        System.out.println("\n--- Exámenes Creados ---");
-                        if (examenes.isEmpty()) {
-                            System.out.println("No hay exámenes registrados.");
-                        } else {
-                            for (Examen ex : examenes) {
-                                System.out.println();
-                                ex.mostrarExamen();
-                            }
-                        }
-                    }
-                }
-            }
+            // if (opcionDocente == 2) {
+            // System.out.println("\n--- Exámenes Creados ---");
+            // if (examenes.isEmpty()) {
+            // System.out.println("No hay exámenes registrados.");
+            // } else {
+            // for (Examen ex : examenes) {
+            // System.out.println();
+            // ex.mostrarExamen();
+            // }
+            // }
+            // }
+            // }
+            // }
         }
 
         scan.close();
