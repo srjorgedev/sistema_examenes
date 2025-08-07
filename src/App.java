@@ -259,6 +259,18 @@ public class App {
                             System.out.print("Pregunta: ");
                             String pregunta = scan.nextLine();
 
+                            // Elegir tipo de pregunta
+                            int tipoPregunta = 1;
+                            do {
+                                System.out.print("¿Tipo de pregunta? (1=Opción múltiple, 2=Selección múltiple): ");
+                                String tipoStr = scan.nextLine();
+                                try {
+                                    tipoPregunta = Integer.parseInt(tipoStr);
+                                } catch (Exception e) {
+                                    tipoPregunta = 0;
+                                }
+                            } while (tipoPregunta != 1 && tipoPregunta != 2);
+
                             ArrayList<String> opciones = new ArrayList<>();
                             char letra = 'a';
                             boolean agregarOtraOpcion = true;
@@ -278,14 +290,20 @@ public class App {
                                 }
                             }
 
-                            // Mostrar letras válidas para la respuesta correcta
+                            // Mostrar letras válidas para la(s) respuesta(s) correcta(s)
                             StringBuilder letrasValidas = new StringBuilder();
                             for (char l = 'a'; l < 'a' + opciones.size(); l++) {
                                 letrasValidas.append(l);
                                 if (l < 'a' + opciones.size() - 1) letrasValidas.append("/");
                             }
-                            System.out.print("Respuesta correcta (" + letrasValidas + "): ");
-                            String correcta = scan.nextLine();
+                            String correcta = "";
+                            if (tipoPregunta == 1) {
+                                System.out.print("Respuesta correcta (" + letrasValidas + "): ");
+                                correcta = scan.nextLine();
+                            } else {
+                                System.out.print("Respuestas correctas, separadas por coma (" + letrasValidas + "): ");
+                                correcta = scan.nextLine();
+                            }
 
                             Pregunta nuevaPregunta = new Pregunta(pregunta, opciones, correcta);
                             examen.preguntas.add(nuevaPregunta);
