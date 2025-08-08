@@ -2,17 +2,8 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-
-        // Inicializar arrays con ArrayList
-        // ArrayList<UsuariosDatos> usuarios = new ArrayList<>();
-        // ArrayList<Examen> examenes = new ArrayList<>();
-
-        // Crear datos de ejemplo
-        // Datos.crearUsuarios(usuarios);
-
         String regex = "\\.-\\.";
 
-        /* Sin usar */
         // Inicializar arrays
         String[] usuariosArray = new String[99];
         String[] historialUsuariosArray = new String[99];
@@ -125,7 +116,7 @@ public class App {
                 System.out.print("  Ingrese su opcion: ");
                 opcionIniciarSesion = scan.nextInt();
                 scan.nextLine();
-                
+
                 System.out.println();
 
                 if (opcionIniciarSesion == 2) {
@@ -449,7 +440,7 @@ public class App {
                             System.out.print("  Ingrese su opcion: ");
                             opcionBorrar = scan.nextInt();
                             scan.nextLine();
-                            
+
                             System.out.println();
 
                             if (opcionBorrar == 2) {
@@ -488,94 +479,88 @@ public class App {
                         }
                     }
                 }
+            } //
 
-                // if (opcionInicio == 2) {
-                // int opcionDocente = 0;
-                // while (opcionDocente != 3) {
-                // System.out.println("Panel Docente");
-                // System.out.println("1. Crear examen");
-                // System.out.println("2. Ver exámenes");
-                // System.out.println("3. Volver");
-                // System.out.print("Opción: ");
-                // opcionDocente = scan.nextInt();
-                // scan.nextLine(); // limpiar buffer
+            if (opcionInicio == 3) {
+                int opcionDocente = 0;
+                while (opcionDocente != 3) {
+                    Interfaz.imprimirTitulo("Panel Docente");
+                    Interfaz.imprimirTextoLineaSalto("1. Crear examen");
+                    Interfaz.imprimirTextoLineaSalto("2. Ver examenes");
+                    Interfaz.imprimirBordeIzqDer();
+                    Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+                    Interfaz.imprimirLineaInfIzqDer();
 
-                // if (opcionDocente == 1) {
-                // System.out.println("Crear Examen");
-                // String id = "EX" + (examenes.size() + 1);
-                // System.out.print("Nombre del examen: ");
-                // String nombre = scan.nextLine();
-                // System.out.print("Fecha (ej: 29/Julio/25): ");
-                // String fecha = scan.nextLine();
-                // System.out.print("Tipo (ej: Ordinario): ");
-                // String tipo = scan.nextLine();
-                // System.out.print("Materia: ");
-                // String materia = scan.nextLine();
-                // System.out.print("Nombre del docente: ");
-                // String docente = scan.nextLine();
+                    System.out.print("Seleccionar opcion: ");
+                    opcionDocente = scan.nextInt();
+                    scan.nextLine();
 
-                // Examen examen = new Examen(id, nombre, fecha, tipo, materia, docente);
+                    if (opcionDocente == 1) {
+                        Interfaz.imprimirTitulo("Crear Examen");
+                        String examenID = "EX"
+                                + " ".repeat((Array.examenInfoIndiceActual)
+                                        - Integer.parseInt(String.valueOf(Array.examenInfoIndiceActual)))
+                                + (Array.examenInfoIndiceActual);
 
-                // // Agregar preguntas
-                // while (true) {
-                // System.out.print("¿Agregar una pregunta? (s/n): ");
-                // String resp = scan.nextLine();
-                // if (!resp.equalsIgnoreCase("s"))
-                // break;
+                        System.out.print("Nombre del examen: ");
+                        String nombre = scan.nextLine();
 
-                // System.out.print("Pregunta: ");
-                // String pregunta = scan.nextLine();
+                        System.out.print("Fecha (ej: 29/Julio/25): ");
+                        String fecha = scan.nextLine();
 
-                // ArrayList<String> opciones = new ArrayList<>();
-                // char letra = 'a';
-                // boolean agregarOtraOpcion = true;
-                // while (agregarOtraOpcion) {
-                // System.out.print("Opción " + letra + ": ");
-                // opciones.add(scan.nextLine());
-                // if (letra >= 'c') {
-                // System.out.print("¿Desea agregar otra opción? (s/n): ");
-                // String masOpc = scan.nextLine();
-                // if (!masOpc.equalsIgnoreCase("s")) {
-                // agregarOtraOpcion = false;
-                // } else {
-                // letra++;
-                // }
-                // } else {
-                // letra++;
-                // }
-                // }
+                        System.out.print("Tipo (ej: Ordinario): ");
+                        String tipo = scan.nextLine();
 
-                // // Mostrar letras válidas para la respuesta correcta
-                // StringBuilder letrasValidas = new StringBuilder();
-                // for (char l = 'a'; l < 'a' + opciones.size(); l++) {
-                // letrasValidas.append(l);
-                // if (l < 'a' + opciones.size() - 1)
-                // letrasValidas.append("/");
-                // }
-                // System.out.print("Respuesta correcta (" + letrasValidas + "): ");
-                // String correcta = scan.nextLine();
+                        System.out.print("Materia: ");
+                        String materia = scan.nextLine();
 
-                // Pregunta nuevaPregunta = new Pregunta(pregunta, opciones, correcta);
-                // examen.preguntas.add(nuevaPregunta);
-                // }
+                        System.out.print("Nombre del docente: ");
+                        String docente = scan.nextLine();
 
-                // examenes.add(examen);
-                // System.out.println("Examen creado correctamente.");
-                // }
+                        // Agregar preguntas
+                        while (true) {
+                            System.out.print("¿Agregar una pregunta? (s/n): ");
+                            String resp = scan.nextLine();
+                            if (!resp.equalsIgnoreCase("s"))
+                                break;
 
-                // if (opcionDocente == 2) {
-                // System.out.println("\n--- Exámenes Creados ---");
-                // if (examenes.isEmpty()) {
-                // System.out.println("No hay exámenes registrados.");
-                // } else {
-                // for (Examen ex : examenes) {
-                // System.out.println();
-                // ex.mostrarExamen();
-                // }
-                // }
-                // }
-                // }
-                // }
+                            System.out.print("Pregunta: ");
+                            String pregunta = scan.nextLine();
+
+                            char letra = 'a';
+                            boolean agregarOtraOpcion = true;
+                            while (agregarOtraOpcion) {
+                                System.out.print("Opción " + letra + ": ");
+
+                                if (letra >= 'c') {
+                                    System.out.print("¿Desea agregar otra opción? (s/n): ");
+                                    String masOpc = scan.nextLine();
+                                    if (!masOpc.equalsIgnoreCase("s")) {
+                                        agregarOtraOpcion = false;
+                                    } else {
+                                        letra++;
+                                    }
+                                } else {
+                                    letra++;
+                                }
+                            }
+
+                            // Mostrar letras válidas para la respuesta correcta
+                            StringBuilder letrasValidas = new StringBuilder();
+
+                            System.out.print("Respuesta correcta (" + letrasValidas + "): ");
+                            String correcta = scan.nextLine();
+
+                        }
+
+                        System.out.println("Examen creado correctamente.");
+                    }
+
+                    if (opcionDocente == 2) {
+                        System.out.println("\n--- Exámenes Creados ---");
+
+                    }
+                }
             }
         }
     }
