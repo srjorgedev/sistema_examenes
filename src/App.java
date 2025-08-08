@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        String regex = "\\.-\\.";
+        String regexUsuarios = "\\.-\\.";
 
         // Inicializar arrays
         String[] usuariosArray = new String[99];
@@ -86,7 +86,7 @@ public class App {
                 usuarioSesionClave = scan.nextLine();
 
                 for (int i = 0; i < Array.usuariosIndiceActual; i++) {
-                    String[] datos = usuariosArray[i].split(regex);
+                    String[] datos = usuariosArray[i].split(regexUsuarios);
 
                     if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
                         usuarioEncontrado = true;
@@ -239,7 +239,7 @@ public class App {
                                 continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                                           // de error.
 
-                            String[] datos = usuariosArray[i].split(regex);
+                            String[] datos = usuariosArray[i].split(regexUsuarios);
                             if (datos[2].length() > nombreMasLargo)
                                 nombreMasLargo = datos[2].length(); // Almacena la longitud del nombre mas largo de un
                                                                     // usuario
@@ -250,7 +250,7 @@ public class App {
                                 continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                                           // de error.
 
-                            String[] datos = usuariosArray[i].split(regex);
+                            String[] datos = usuariosArray[i].split(regexUsuarios);
                             String usuarioTexto = "     " + datos[0] + "      " + datos[1] + " "
                                     + datos[2] + " ".repeat(nombreMasLargo - datos[2].length()) + "\t" + datos[3];
                             System.out.println(usuarioTexto);
@@ -298,7 +298,7 @@ public class App {
                         boolean usuarioEncontrado = false;
 
                         for (int i = 0; i < Array.usuariosIndiceActual; i++) {
-                            String[] datos = usuariosArray[i].split(regex);
+                            String[] datos = usuariosArray[i].split(regexUsuarios);
 
                             if (datos[1].equals(idModificar)) {
                                 usuarioEncontrado = true;
@@ -392,7 +392,7 @@ public class App {
                             if (usuariosArray[i].isEmpty())
                                 continue;
 
-                            datos = usuariosArray[i].split(regex);
+                            datos = usuariosArray[i].split(regexUsuarios);
                             indiceBorrar = i;
 
                             if (datos[1].equals(idBorrar)) {
@@ -495,6 +495,8 @@ public class App {
                     opcionDocente = scan.nextInt();
                     scan.nextLine();
 
+                    System.out.println();
+
                     if (opcionDocente == 1) {
                         Interfaz.imprimirTitulo("Crear Examen");
                         String examenID = "EX"
@@ -502,24 +504,24 @@ public class App {
                                         - Integer.parseInt(String.valueOf(Array.examenInfoIndiceActual)))
                                 + (Array.examenInfoIndiceActual);
 
-                        System.out.print("Nombre del examen: ");
+                        System.out.print("    Nombre del examen: ");
                         String nombre = scan.nextLine();
 
-                        System.out.print("Fecha (ej: 29/Julio/25): ");
+                        System.out.print("    Fecha (ej: 29/Julio/25): ");
                         String fecha = scan.nextLine();
 
-                        System.out.print("Tipo (ej: Ordinario): ");
+                        Interfaz.imprimirTextoLineaSalto("Tipos -> (O)rdinario (R)emedial (E)xtra");
+                        System.out.print("    Tipo (ej: Ordinario): ");
                         String tipo = scan.nextLine();
 
-                        System.out.print("Materia: ");
+                        System.out.print("    Materia: ");
                         String materia = scan.nextLine();
 
-                        System.out.print("Nombre del docente: ");
-                        String docente = scan.nextLine();
+                        System.out.println("    Nombre del docente: " + usuarioSesionNombre);
 
                         // Agregar preguntas
                         while (true) {
-                            System.out.print("¿Agregar una pregunta? (s/n): ");
+                            System.out.print("     Agregar una pregunta? (s/n): ");
                             String resp = scan.nextLine();
                             if (!resp.equalsIgnoreCase("s"))
                                 break;
