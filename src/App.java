@@ -277,56 +277,6 @@ public class App {
                                 usuarioEncontrado = true;
                                 Interfaz.imprimirLineaConexion();
 
-<<<<<<< HEAD
-                            // Elegir tipo de pregunta
-                            int tipoPregunta = 1;
-                            do {
-                                System.out.print("¿Tipo de pregunta? (1=Opción múltiple, 2=Selección múltiple): ");
-                                String tipoStr = scan.nextLine();
-                                try {
-                                    tipoPregunta = Integer.parseInt(tipoStr);
-                                } catch (Exception e) {
-                                    tipoPregunta = 0;
-                                }
-                            } while (tipoPregunta != 1 && tipoPregunta != 2);
-
-                            ArrayList<String> opciones = new ArrayList<>();
-                            char letra = 'a';
-                            boolean agregarOtraOpcion = true;
-                            while (agregarOtraOpcion) {
-                                System.out.print("Opción " + letra + ": ");
-                                opciones.add(scan.nextLine());
-                                if (letra >= 'c') {
-                                    System.out.print("¿Desea agregar otra opción? (s/n): ");
-                                    String masOpc = scan.nextLine();
-                                    if (!masOpc.equalsIgnoreCase("s")) {
-                                        agregarOtraOpcion = false;
-                                    } else {
-                                        letra++;
-                                    }
-                                } else {
-                                    letra++;
-                                }
-                            }
-
-                            // Mostrar letras válidas para la(s) respuesta(s) correcta(s)
-                            StringBuilder letrasValidas = new StringBuilder();
-                            for (char l = 'a'; l < 'a' + opciones.size(); l++) {
-                                letrasValidas.append(l);
-                                if (l < 'a' + opciones.size() - 1) letrasValidas.append("/");
-                            }
-                            String correcta = "";
-                            if (tipoPregunta == 1) {
-                                System.out.print("Respuesta correcta (" + letrasValidas + "): ");
-                                correcta = scan.nextLine();
-                            } else {
-                                System.out.print("Respuestas correctas, separadas por coma (" + letrasValidas + "): ");
-                                correcta = scan.nextLine();
-                            }
-
-                            Pregunta nuevaPregunta = new Pregunta(pregunta, opciones, correcta);
-                            examen.preguntas.add(nuevaPregunta);
-=======
                                 Interfaz.imprimirTextoLineaSalto("Usuario encontrado, datos: ");
                                 Interfaz.imprimirTextoLineaSalto("Nombre: " + datos[2]);
                                 Interfaz.imprimirTextoLineaSalto("Clave: " + datos[3]);
@@ -352,7 +302,6 @@ public class App {
                                 break;
                             }
 
->>>>>>> 305f40662db9f2e2350f28325b067d7c2e8388ec
                         }
 
                         Interfaz.imprimirLineaConexion();
