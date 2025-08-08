@@ -12,6 +12,9 @@ public class App {
         String[] examenReactivosArray = new String[99];
         String[] examenRespuestasArray = new String[99];
 
+        // Array de uso para el apartado de Docente
+        char[] reactivos = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
+
         // // Crear datos de ejemplo
         Datos.crearUsuarios(usuariosArray);
 
@@ -159,7 +162,7 @@ public class App {
                 if (opcionPanel == 1) {
                     while (opcionPanelCrear == 0
                             || !(opcionPanelCrear == 1 || opcionPanelCrear == 2 || opcionPanelCrear == 3)) {
-                        usuarioId = "0".repeat(8 - String.valueOf(Array.usuariosIndiceActual).length())
+                        usuarioId = "0".repeat(4 - String.valueOf(Array.usuariosIndiceActual).length())
                                 + Array.usuariosIndiceActual;
 
                         System.out.println();
@@ -483,6 +486,7 @@ public class App {
 
             if (opcionInicio == 3) {
                 int opcionDocente = 0;
+
                 while (opcionDocente != 3) {
                     Interfaz.imprimirTitulo("Panel Docente");
                     Interfaz.imprimirTextoLineaSalto("1. Crear examen");
@@ -491,18 +495,21 @@ public class App {
                     Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
                     Interfaz.imprimirLineaInfIzqDer();
 
-                    System.out.print("Seleccionar opcion: ");
+                    System.out.print("  Seleccionar opcion: ");
                     opcionDocente = scan.nextInt();
                     scan.nextLine();
 
                     System.out.println();
 
                     if (opcionDocente == 1) {
+                        String respuestasCorrectas = "";
+                        String examenInformacion = "";
+                        String examenPreguntas = "";
+                        String examenRespuestas = "";
+                        String examenReactivos = "";
+
                         Interfaz.imprimirTitulo("Crear Examen");
-                        String examenID = "EX"
-                                + " ".repeat((Array.examenInfoIndiceActual)
-                                        - Integer.parseInt(String.valueOf(Array.examenInfoIndiceActual)))
-                                + (Array.examenInfoIndiceActual);
+                        String examenID = "EX0" + Array.examenInfoIndiceActual;
 
                         System.out.print("    Nombre del examen: ");
                         String nombre = scan.nextLine();
@@ -511,7 +518,7 @@ public class App {
                         String fecha = scan.nextLine();
 
                         Interfaz.imprimirTextoLineaSalto("Tipos -> (O)rdinario (R)emedial (E)xtra");
-                        System.out.print("    Tipo (ej: Ordinario): ");
+                        System.out.print("    Tipo: ");
                         String tipo = scan.nextLine();
 
                         System.out.print("    Materia: ");
@@ -519,40 +526,72 @@ public class App {
 
                         System.out.println("    Nombre del docente: " + usuarioSesionNombre);
 
-                        // Agregar preguntas
+                        examenInformacion = examenID + ".-." + nombre + ".-." + fecha + ".-." + tipo.toUpperCase()
+                                + ".-." + materia + ".-." + usuarioSesionNombre + ".-." + usuarioSesionActual;
+                        examenPreguntas += examenID;
+                        examenReactivos += examenID;
+                        examenRespuestas += examenID;
+
+                        int preguntaIndice = 1;
+
+                        Interfaz.imprimirBordeIzqDer();
+                        Interfaz.imprimirLineaConexion();
+
+                        Interfaz.imprimirTextoLineaSalto("Nota: Para dejar de agregar preguntas,");
+                        Interfaz.imprimirTextoLineaSalto("deje un reactivo en blanco");
+                        Interfaz.imprimirBordeIzqDer();
+
+                        Interfaz.imprimirTextoLineaSalto("Ingresar preguntas");
+                        Interfaz.imprimirBordeIzqDer();
+
                         while (true) {
-                            System.out.print("     Agregar una pregunta? (s/n): ");
-                            String resp = scan.nextLine();
-                            if (!resp.equalsIgnoreCase("s"))
+                            System.out.print("    Pregunta " + preguntaIndice + ": ");
+                            String pregunta = scan.nextLine();
+                            Interfaz.imprimirBordeIzqDer();
+
+                            if (pregunta.isEmpty())
                                 break;
 
-                            System.out.print("Pregunta: ");
-                            String pregunta = scan.nextLine();
+                            Interfaz.imprimirTextoLineaSalto("Tipos -> (O)pcion multiple (S)eleccion multiple");
+                            System.out.print("    Tipo de pregunta: ");
+                            String tipoExamen = scan.nextLine();
 
-                            char letra = 'a';
-                            boolean agregarOtraOpcion = true;
-                            while (agregarOtraOpcion) {
-                                System.out.print("Opción " + letra + ": ");
+                            examenPreguntas += ".-." + tipoExamen + pregunta ;
 
-                                if (letra >= 'c') {
-                                    System.out.print("¿Desea agregar otra opción? (s/n): ");
-                                    String masOpc = scan.nextLine();
-                                    if (!masOpc.equalsIgnoreCase("s")) {
-                                        agregarOtraOpcion = false;
-                                    } else {
-                                        letra++;
-                                    }
-                                } else {
-                                    letra++;
-                                }
+                            Interfaz.imprimirLineaConexion();
+
+                            Interfaz.imprimirTextoLineaSalto("Nota: Para dejar de agregar respuestas,");
+                            Interfaz.imprimirTextoLineaSalto("deje un reactivo en blanco");
+                            Interfaz.imprimirBordeIzqDer();
+
+                            Interfaz.imprimirTextoLineaSalto("Ingrese respuestas:");
+
+                            int indiceReactivo = 0;
+
+                            while (true) {
+                                System.out.print("    " + reactivos[indiceReactivo] + ") ");
+                                String respuesta = scan.nextLine();
+
+                                if (respuesta.isEmpty())
+                                    break;
+                                indiceReactivo++;
                             }
 
-                            // Mostrar letras válidas para la respuesta correcta
-                            StringBuilder letrasValidas = new StringBuilder();
+                            String reactivosDisponibles = "";
+                            for (int i = 0; i <= indiceReactivo; i++) {
+                                reactivosDisponibles += "(" + reactivos[i] + ") ";
+                            }
 
-                            System.out.print("Respuesta correcta (" + letrasValidas + "): ");
-                            String correcta = scan.nextLine();
+                            Interfaz.imprimirLineaConexion();
 
+                            Interfaz.imprimirTextoLineaSalto("Seleccione la(s) respuesta(s)");
+
+                            Interfaz.imprimirTextoLineaSalto("Respuestas disponibles");
+                            Interfaz.imprimirTextoLineaSalto(reactivosDisponibles);
+
+                            String respuesta = scan.nextLine();
+
+                            preguntaIndice++;
                         }
 
                         System.out.println("Examen creado correctamente.");
