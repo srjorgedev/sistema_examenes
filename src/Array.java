@@ -17,4 +17,8 @@ public class Array {
     public static void modificar(String[] array, int indice, String nuevo) {
         array[indice] = nuevo;
     }
+
+    public static void borrar(String[] array, int indice) {
+        array[indice] = "";
+    }
 }
