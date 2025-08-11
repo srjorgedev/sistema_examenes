@@ -93,7 +93,7 @@ public class App {
                 usuarioSesionClave = scan.nextLine();
 
                 for (int i = 0; i < Array.usuariosIndiceActual; i++) {
-                    String[] datos = usuariosArray[i].split(regex);
+                    String[] datos = usuariosArray[i].split(regexUsuarios);
 
                     if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
                         usuarioEncontrado = true;
@@ -123,6 +123,7 @@ public class App {
                 System.out.print("  Ingrese su opcion: ");
                 opcionIniciarSesion = scan.nextInt();
                 scan.nextLine();
+
 
                 System.out.println();
 
