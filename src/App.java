@@ -93,7 +93,7 @@ public class App {
                 usuarioSesionClave = scan.nextLine();
 
                 for (int i = 0; i < Array.usuariosIndiceActual; i++) {
-                    String[] datos = usuariosArray[i].split(regexUsuarios);
+                    String[] datos = usuariosArray[i].split(regex);
 
                     if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
                         usuarioEncontrado = true;
