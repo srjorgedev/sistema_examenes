@@ -37,22 +37,6 @@ public class App {
                 opcionProfesor = 0, opcionAdministrar = 0, opcionIniciarSesion = 0, opcionBorrar = 0;
         int nombreMasLargo = 0;
 
-        /*
-         * Examen Info
-         * ID Nombre Fecha Tipo Materia Docente
-         * 00000001.-.Quimica 2.-.29/Julio/25.-.Ordinario.-.Quimica.-.Javier Perez
-         * 
-         * Examen Preguntas
-         * ID Preguntas
-         * 00000001.-.¿Quien fue Cristobal Colon?.-.¿Cuando se descubrio america?
-         * 
-         * Examen Reactivos
-         * 00000001.-.a) Mi padre b) Un puñetas c) Dios.-.a) Ayer b) Hoy c) Mañana
-         * 
-         * Examen Respuestas
-         * 00000001.-.a).-.b)c)
-         */
-
         while (true) {
             while (opcionInicio == 0
                     || !(opcionInicio == 1 || opcionInicio == 2 || opcionInicio == 3 || opcionInicio == 4)) {
@@ -123,7 +107,6 @@ public class App {
                 System.out.print("  Ingrese su opcion: ");
                 opcionIniciarSesion = scan.nextInt();
                 scan.nextLine();
-
 
                 System.out.println();
 
@@ -636,9 +619,34 @@ public class App {
                             if (examenInfo[3].toUpperCase().equals("E"))
                                 tipo = "Extraordinario";
 
-                            Interfaz.imprimirTextoLineaSalto("Examen - " + examenInfo[0] + " - " + tipo);
+                            Interfaz.imprimirTextoLineaSalto("Examen: " + examenInfo[0] + " - " + tipo);
+                            Interfaz.imprimirTextoLineaSalto("Creado por: " + examenInfo[5]);
                             Interfaz.imprimirTextoLineaSalto(examenInfo[1] + " - " + examenInfo[4]);
+
+                            Interfaz.imprimirBordeIzqDer();
+                            Interfaz.imprimirTextoLineaSalto("Preguntas");
+                            Interfaz.imprimirBordeIzqDer();
+
+                            for (int j = 1; j < examenPreguntas.length; j++) {
+                                Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
+                                Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
+
+                                String respuestas = "";
+                                for (int k = 0; k < examenRespuestas[j].length(); k++) {
+                                    if (examenRespuestas[k].isBlank())
+                                        continue;
+
+                                    respuestas += examenRespuestas[j].charAt(k) + ") ";
+                                }
+
+                                Interfaz.imprimirBordeIzqDer();
+                                Interfaz.imprimirTextoLineaSalto("Respuestas");
+                                Interfaz.imprimirTextoLineaSalto(respuestas);
+                                Interfaz.imprimirBordeIzqDer();
+                            }
                         }
+
+                        Interfaz.imprimirLineaInfIzqDer();
                     }
                 }
             }

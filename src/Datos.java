@@ -14,7 +14,7 @@ public class Datos {
     }
 
     public static void crearExamenPreguntas(String[] array) {
-        Array.agregarExamenPreguntas(array, "EX00.-.o-Pregunta 1.-.s-Pregunta 2");
+        Array.agregarExamenPreguntas(array, "EX00.-.o - Pregunta 1.-.s - Pregunta 2");
     }
 
     public static void crearExamenReactivos(String[] array) {
