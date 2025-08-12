@@ -1,5 +1,0 @@
-E.-.0000.-.admin.-.clave
-E.-.0001.-.estudiante1.-.clave
-D.-.0002.-.profesor1.-.clave
-D.-.0003.-.Jorge Sandoval.-.jorge12345
-D.-.0004.-.Docente chido.-.claveacceso
