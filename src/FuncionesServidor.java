@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -28,5 +29,42 @@ public class FuncionesServidor {
         } catch (IOException e) {
             System.out.println("Error al conectar con el servidor: " + e.getMessage());
         }
+    }
+
+    public static String[] leerArchivo(String archivo) {
+        String rutaArchivo = "./" + archivo + ".txt";
+
+        int numeroLineas = 0;
+        String[] usuarios;
+
+        // Contamos el número de líneas
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            while (br.readLine() != null) {
+                numeroLineas++;
+            }
+        } catch (IOException e) {
+            System.err.println("Error al contar líneas: " + e.getMessage());
+            return usuarios = new String[0];
+        }
+
+        // Creamos el array con el tamaño exacto
+        usuarios = new String[numeroLineas];
+
+        // Luego, leemos el archivo de nuevo y guardamos cada línea en el array
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            for (int i = 0; i < numeroLineas; i++) {
+                usuarios[i] = br.readLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+            return usuarios = new String[0];
+        }
+
+        // Imprimimos el array para verificar
+        for (String linea : usuarios) {
+            System.out.println(linea);
+        }
+
+        return usuarios;
     }
 }
