@@ -612,41 +612,39 @@ public class App {
                             opcionCrearExamen = 0;
                         }
                         if (opcionCrearExamen == 4) {
-                            System.out.print(
-                                    "Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
+                        System.out.print("Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
                             String nombreArchivo = scan.nextLine();
 
-                            StringBuilder todosExamenes = new StringBuilder();
-                            for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
-                                if (!examenInfoArray[i].isEmpty()) {
-                                    todosExamenes.append(examenInfoArray[i]).append("\n");
-                                    todosExamenes.append(examenPreguntasArray[i]).append("\n");
-                                    todosExamenes.append(examenReactivosArray[i]).append("\n");
-                                    todosExamenes.append(examenRespuestasArray[i]).append("\n");
-                                    todosExamenes.append("---\n"); // Separador entre exámenes
-                                }
-                            }
-
-                            // Enviar al servidor
                             try (
-                                    Socket socket = new Socket("localhost", 5000);
-                                    PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                                    BufferedReader entrada = new BufferedReader(
-                                            new InputStreamReader(socket.getInputStream()))) {
-                                salida.println("GUARDAR_EXAMENES");
-                                salida.println(nombreArchivo); // Nombre del archivo a crear
-                                salida.println(todosExamenes.toString()); // Todos los exámenes
-                                salida.println("");
+                                Socket socket = new Socket("localhost", 5000);
+                                PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                                BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+                            ) {
+                                salida.println("REGISTRO_EXAMENES");  
+                                for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
+                                    if (!examenInfoArray[i].isEmpty()) {
+                                        salida.println(examenInfoArray[i]);
+                                        salida.println(examenPreguntasArray[i]);
+                                        salida.println(examenReactivosArray[i]);
+                                        salida.println(examenRespuestasArray[i]);
+                                        salida.println("---"); 
+                                    }
+                                }
 
+                                salida.println(""); 
                                 String respuesta;
                                 while ((respuesta = entrada.readLine()) != null) {
                                     System.out.println(respuesta);
-                                    if (respuesta.contains("Examenes guardados"))
+                                    if (respuesta.contains("Examen guardado correctamente")) {
                                         break;
+                                    }
                                 }
+
                             } catch (Exception e) {
                                 System.out.println("Error al conectar con el servidor: " + e.getMessage());
                             }
+                        }
+                                            
                         }
                     }
 
@@ -754,4 +752,4 @@ public class App {
             }
         }
     } //
-}
+

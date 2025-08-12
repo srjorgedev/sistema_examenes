@@ -48,8 +48,55 @@ public class Servidor {
                             lector.close();
 
                             salida.println("=== Fin de consulta ===");
-                        }
+                        } 
+                        if ("REGISTRO_EXAMENES".equalsIgnoreCase(comando)) {
+                            PrintWriter archivoE = new PrintWriter(new FileWriter("Examenes.txt", true));
+                            archivoE.println("===== Nuevo Examen =====");
 
+                            String lineaE;
+                            while ((lineaE = entrada.readLine()) != null && !lineaE.isEmpty()) {
+                                archivoE.println(lineaE);
+                            }
+                            archivoE.println("---");
+                            archivoE.close();
+
+                            salida.println("Examen guardado correctamente");
+
+                            BufferedReader lector = new BufferedReader(new FileReader("Examenes.txt"));
+                            String registro;
+                            while ((registro = lector.readLine()) != null) {
+                                salida.println(registro);
+                            }
+                            lector.close();
+
+                            salida.println("=== Fin de consulta ===");
+                    
+                    } 
+                        if ("REGISTRO_CALIFICACIONES".equalsIgnoreCase(comando)) {
+                            PrintWriter archivoE = new PrintWriter(new FileWriter("Calificaciones.txt", true));
+                            archivoE.println("===== Calificaciones =====");
+
+                            String linea;
+                            while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
+                                archivoE.println(linea);
+                            }
+                            archivoE.println("---");
+                            archivoE.close();
+
+                            salida.println("Calificaiones agregadas correctamente");
+
+                            BufferedReader lector = new BufferedReader(new FileReader("Calificaciones.txt"));
+                            String registro;
+                            while ((registro = lector.readLine()) != null) {
+                                salida.println(registro);
+                            }
+                            lector.close();
+
+                            salida.println("=== Fin de consulta ===");
+                    }
+                
+                            
+                    
                     } catch (IOException e) {
                         System.out.println("Error con cliente: " + e.getMessage());
                     } finally {

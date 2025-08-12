@@ -1,0 +1,22 @@
+===== Nuevo Examen =====
+EX00.-.Prueba.-.29/07/27.-.O.-.Materia.-.admin.-.0000
+EX00.-.o - Pregunta 1.-.s - Pregunta 2
+EX00.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.
+EX00.-.a.-.abc.-.
+---
+EX01.-.Prueba 2.-.29/07/27.-.O.-.Materia.-.admin.-.0000
+EX01.-.o - Pregunta 1.-.s - Pregunta 2
+EX01.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.
+EX01.-.a.-.abc.-.
+---
+EX02.-.Prueba 3.-.29/07/27.-.O.-.Materia.-.admin.-.0001
+EX02.-.o - Pregunta 1.-.s - Pregunta 2
+EX02.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.
+EX02.-.a.-.abc.-.
+---
+EX03.-.s.-.s.-.D.-.d.-.admin.-.0000
+EX03
+EX03
+EX03
+---
+---
