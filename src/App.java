@@ -639,7 +639,7 @@ public class App {
                                     "Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
                             String nombreArchivo = scan.nextLine();
 
-                            // Une todos los exámenes en un solo String, separados por salto de línea
+    
                             StringBuilder todosExamenes = new StringBuilder();
                             for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
                                 if (!examenInfoArray[i].isEmpty()) {
