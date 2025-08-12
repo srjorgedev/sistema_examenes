@@ -351,7 +351,7 @@ public class App {
 
                         Interfaz.imprimirTextoLineaSalto("1. Borrar a otro usuario");
                         Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
-                        Interfaz.imprimirTextoLineaSalto("2. Volver al inicio");
+                        Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
 
                         Interfaz.imprimirLineaInfIzqDer();
 
@@ -400,7 +400,9 @@ public class App {
             if (opcionInicio == 3) {
                 int opcionDocente = 0;
 
-                while (opcionDocente != 3) {
+                while (opcionDocente == 0 || !(
+                    opcionDocente == 1 || opcionDocente == 2 || opcionDocente == 3
+                )) {
                     Interfaz.imprimirTitulo("Panel Docente");
                     Interfaz.imprimirTextoLineaSalto("1. Crear examen");
                     Interfaz.imprimirTextoLineaSalto("2. Ver examenes");
@@ -602,11 +604,17 @@ public class App {
                     }
 
                     if (opcionDocente == 2) {
+                        int opcionVerExamenes;
+
                         Interfaz.imprimirTitulo("Examenes creados");
                         Interfaz.imprimirBordeIzqDer();
 
                         for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
                             String[] examenInfo = examenInfoArray[i].split(regex);
+
+                            if (!(examenInfo[examenInfo.length - 1].equals(usuarioSesionActual)))
+                                continue;
+
                             String[] examenPreguntas = examenPreguntasArray[i].split(regex);
                             String[] examenReactivos = examenReactivosArray[i].split(regex);
                             String[] examenRespuestas = examenRespuestasArray[i].split(regex);
@@ -644,9 +652,38 @@ public class App {
                                 Interfaz.imprimirTextoLineaSalto(respuestas);
                                 Interfaz.imprimirBordeIzqDer();
                             }
+
+                            Interfaz.imprimirLineaConexion();
                         }
 
+                        Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+                        Interfaz.imprimirBordeIzqDer();
+
+                        Interfaz.imprimirTextoLineaSalto("1. Finalizar examen");
+                        Interfaz.imprimirTextoLineaSalto("2. Borrar examen");
+                        Interfaz.imprimirTextoLineaSalto("3. Volver al panel docente");
+                        Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+
                         Interfaz.imprimirLineaInfIzqDer();
+
+                        System.out.print("  Ingrese su opcion: ");
+                        opcionVerExamenes = scan.nextInt();
+                        scan.nextLine();
+
+                        System.out.println();
+
+                        if (opcionVerExamenes == 3) {
+                            opcionInicio = 3;
+                            opcionDocente = 2;
+                            opcionVerExamenes = 0;
+                            break;
+                        }
+                        if (opcionVerExamenes == 4) {
+                            opcionInicio = 0;
+                            opcionDocente = 0;
+                            opcionVerExamenes = 0;
+                            break;
+                        }
                     }
                 }
             }
