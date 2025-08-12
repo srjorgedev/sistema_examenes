@@ -15,6 +15,10 @@ public class App {
         String[] examenPreguntasArray = new String[99];
         String[] examenReactivosArray = new String[99];
         String[] examenRespuestasArray = new String[99];
+        String[] cursosArray = new String[100];
+        int cursosIndiceActual = 0;
+        String[] temasArray = new String[100];
+        int temasIndiceActual = 0;
 
         // Array de uso para el apartado de Docente
         char[] reactivos = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
@@ -130,45 +134,18 @@ public class App {
 
             if (opcionPanel == 1) {
                 opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray);
-              
-                }
 
-                if (opcionPanelCrear == 2) {
-                    opcionPanel = 0;
-                    opcionPanelCrear = 0;
-                }
+            }
 
-                if (opcionPanelCrear == 3) {
-                    opcionInicio = 0;
-                    opcionPanel = 0;
-                    opcionPanelCrear = 0;
-                }
-                if (opcionPanel == 4){
-                      // ...ya tienes tipo, id, nombre, clave capturados...
-                String usuarioCompleto = usuariosArray[Array.usuariosIndiceActual - 1];
+            if (opcionPanelCrear == 2) {
+                opcionPanel = 0;
+                opcionPanelCrear = 0;
+            }
 
-                // Pedir el nombre del archivo para guardar en el servidor
-                System.out.print("Ingrese el nombre de archivo para guardar el usuario (ejemplo: usuario1.txt): ");
-                String nombreArchivo = scan.nextLine();
-
-                // Enviar al servidor
-                try (
-                        Socket socket = new Socket("localhost", 5000);
-                        PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                        BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                    salida.println("REGISTRO_USUARIO");
-                    salida.println(nombreArchivo); // Nombre del archivo a crear
-                    salida.println(usuarioCompleto); // Datos del usuario
-
-                    String respuesta;
-                    while ((respuesta = entrada.readLine()) != null) {
-                        System.out.println(respuesta);
-                        if (respuesta.contains("Usuario guardado"))
-                            break;
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error al conectar con el servidor: " + e.getMessage());
-                }
+            if (opcionPanelCrear == 3) {
+                opcionInicio = 0;
+                opcionPanel = 0;
+                opcionPanelCrear = 0;
             }
 
             if (opcionPanel == 2) {
@@ -432,14 +409,14 @@ public class App {
             if (opcionInicio == 3) {
                 int opcionDocente = 0;
 
-                while (opcionDocente == 0 || !(
-                    opcionDocente == 1 || opcionDocente == 2 || opcionDocente == 3
-                )) {
+                while (opcionDocente == 0 || !(opcionDocente == 1 || opcionDocente == 2 || opcionDocente == 3)) {
                     Interfaz.imprimirTitulo("Panel Docente");
                     Interfaz.imprimirTextoLineaSalto("1. Crear examen");
                     Interfaz.imprimirTextoLineaSalto("2. Ver examenes");
+                    Interfaz.imprimirTextoLineaSalto("3. Agregar curso");
+                    Interfaz.imprimirTextoLineaSalto("4. Agregar tema");
                     Interfaz.imprimirBordeIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+                    Interfaz.imprimirTextoLineaSalto("5. Volver al inicio");
                     Interfaz.imprimirLineaInfIzqDer();
 
                     System.out.print("  Seleccionar opcion: ");
@@ -639,7 +616,6 @@ public class App {
                                     "Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
                             String nombreArchivo = scan.nextLine();
 
-    
                             StringBuilder todosExamenes = new StringBuilder();
                             for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
                                 if (!examenInfoArray[i].isEmpty()) {
@@ -660,7 +636,7 @@ public class App {
                                 salida.println("GUARDAR_EXAMENES");
                                 salida.println(nombreArchivo); // Nombre del archivo a crear
                                 salida.println(todosExamenes.toString()); // Todos los exámenes
-                                salida.println(""); 
+                                salida.println("");
 
                                 String respuesta;
                                 while ((respuesta = entrada.readLine()) != null) {
@@ -743,21 +719,39 @@ public class App {
 
                         System.out.println();
 
-                        if (opcionVerExamenes == 3) {
-                            opcionInicio = 3;
-                            opcionDocente = 2;
-                            opcionVerExamenes = 0;
-                            break;
+                        if (opcionDocente == 3) {
+                            System.out.print("Nombre del curso: ");
+                            String nuevoCurso = scan.nextLine();
+
+                            if (cursosIndiceActual < cursosArray.length) {
+                                cursosArray[cursosIndiceActual] = nuevoCurso;
+                                cursosIndiceActual++;
+                                System.out.println("Curso agregado correctamente.");
+                            } else {
+                                System.out.println("No hay espacio para más cursos.");
+                            }
                         }
-                        if (opcionVerExamenes == 4) {
-                            opcionInicio = 0;
-                            opcionDocente = 0;
-                            opcionVerExamenes = 0;
-                            break;
+
+                        if (opcionDocente == 4) {
+                            System.out.print("Nombre del tema: ");
+                            String nuevoTema = scan.nextLine();
+
+                            if (temasIndiceActual < temasArray.length) {
+                                temasArray[temasIndiceActual] = nuevoTema;
+                                temasIndiceActual++;
+                                System.out.println("Tema agregado correctamente.");
+                            } else {
+                                System.out.println("No hay espacio para más temas.");
+                            }
                         }
+                    }
+
+                    if (opcionDocente == 5) {
+                        opcionDocente = 0; // Regresa al inicio
+                        break;
                     }
                 }
             }
-        } //
-    }
+        }
+    } //
 }
