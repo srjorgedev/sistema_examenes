@@ -16,3 +16,12 @@ E.-.0005.-.Daniela.-.0333
 ===== Nuevo Registro =====
 D.-.0006.-.juan.-.0099
 ---
+===== Nuevo Registro =====
+E.-.0005.-.jose.-.0031
+---
+===== Nuevo Registro =====
+E.-.0006.-.fanny.-.0020
+---
+===== Nuevo Registro =====
+E.-.0005.-.pedro.-.0033
+---
