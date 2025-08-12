@@ -10,3 +10,9 @@ E.-.0005.-.sara.-.2202
 ===== Nuevo Registro =====
 E.-.0005.-.julian.-.0011
 ---
+===== Nuevo Registro =====
+E.-.0005.-.Daniela.-.0333
+---
+===== Nuevo Registro =====
+D.-.0006.-.juan.-.0099
+---
