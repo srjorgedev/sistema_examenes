@@ -1,60 +1,52 @@
+// Servidor.java
 import java.io.*;
 import java.net.*;
 
 public class Servidor {
-    public static void main(String[] args) throws IOException {
-        ServerSocket servidor = new ServerSocket(5000);
-        System.out.println("Servidor esperando conexiones...");
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(5000)) {
+            System.out.println("Servidor iniciado en puerto 5000...");
 
-        // Crear carpetas si no existen
-        new File("usuarios").mkdirs();
-        new File("examenes").mkdirs();
-        new File("calificaciones").mkdirs();
+            while (true) {
+                try (Socket socket = serverSocket.accept();
+                     BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                     PrintWriter salida = new PrintWriter(socket.getOutputStream(), true)) {
 
-        while (true) {
-            Socket socket = servidor.accept();
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                    String comando = entrada.readLine();
 
-            String comando = entrada.readLine(); // Lee la opción enviada por el cliente
+                    if ("REGISTRO_USUARIO".equalsIgnoreCase(comando)) {
+                        // Guardar usuario en archivo
+                        PrintWriter archivo = new PrintWriter(new FileWriter("Usuarios.txt", true));
+                        archivo.println("===== Nuevo Registro =====");
 
-            if (comando.equalsIgnoreCase("REGISTRO_USUARIO")) {
-                String nombreArchivo = entrada.readLine(); // Nombre del archivo
+                        String linea;
+                        while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
+                            archivo.println(linea);
+                        }
+                        archivo.println("---");
+                        archivo.close();
 
-                StringBuilder datosUsuario = new StringBuilder();
-                String linea;  // Datos del usuario
-                while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
-                    datosUsuario.append(linea).append("\n");
-                }
-                File archivo = new File("usuarios/" + nombreArchivo);
-                try (PrintWriter pw = new PrintWriter(new FileWriter(archivo, true))) { // true para agregar si ya existe
-                    pw.println(datosUsuario);
-                    salida.println("Usuario guardado correctamente en " + nombreArchivo+".txt");
-                } catch (Exception e) {
-                    salida.println("Error al guardar el usuario: " + e.getMessage());
-                }
-            }
+                        // Confirmar
+                        salida.println("Usuario guardado correctamente");
 
-            if (comando.equalsIgnoreCase("GUARDAR_EXAMENES")) {
-                String nombreArchivo = entrada.readLine(); // Nombre del archivo
+                        // Mandar automáticamente el contenido del archivo
+                        BufferedReader lector = new BufferedReader(new FileReader("Usuarios.txt"));
+                        String registro;
+                        while ((registro = lector.readLine()) != null) {
+                            salida.println(registro);
+                        }
+                        lector.close();
 
-                // Leer todas las líneas de exámenes hasta que no haya más o llegue una línea vacía
-                StringBuilder datosExamenes = new StringBuilder();
-                String linea;
-                while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
-                    datosExamenes.append(linea).append("\n");
-                }
-
-                File archivo = new File("examenes/" + nombreArchivo);
-                try (PrintWriter pw = new PrintWriter(new FileWriter(archivo, true))) {
-                    pw.print(datosExamenes.toString());
-                    salida.println("Examenes guardados correctamente en " + nombreArchivo);
-                } catch (Exception e) {
-                    salida.println("Error al guardar los examenes: " + e.getMessage());
+                        salida.println("=== Fin de consulta ===");
+                    }
                 }
             }
+        } catch (IOException e) {
+            System.out.println("Error en el servidor: " + e.getMessage());
+        
+            }
 
-            socket.close();
-        }
-    }
+            
+    
+}
 }
