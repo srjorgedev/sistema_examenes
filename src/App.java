@@ -20,18 +20,24 @@ public class App {
         String[] temasArray = new String[100];
         int temasIndiceActual = 0;
 
+        int[] indice = {
+            0,          // Usuarios 
+            0,          // Historial usuarios
+            0,          // Examen - Informacion
+            0,          // Examen - Preguntas
+            0,          // Examen - Reactivos
+            0           // Examen - Respuestas
+        };
+
         // Array de uso para el apartado de Docente
         char[] reactivos = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
 
         // // Crear datos de ejemplo
-        Datos.crearUsuarios(usuariosArray);
+        Datos.crearUsuarios(usuariosArray, indice);
         Datos.crearExamenInformacion(examenInfoArray);
         Datos.crearExamenPreguntas(examenPreguntasArray);
         Datos.crearExamenReactivos(examenReactivosArray);
         Datos.crearExamenRespuestas(examenRespuestasArray);
-
-        // Variables de captura de datos del usuario
-        String usuarioNombre, usuarioPass, usuarioId, usuarioTipo;
 
         // Variables de gestion del usuario actual
         String usuarioSesionActual = "", usuarioSesionClave = "", usuarioSesionID = "", usuarioSesionNombre = "",
@@ -84,7 +90,7 @@ public class App {
                 System.out.print("    Clave: ");
                 usuarioSesionClave = scan.nextLine();
 
-                for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                for (int i = 0; i < indice[0]; i++) {
                     String[] datos = usuariosArray[i].split(regex);
 
                     if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
@@ -133,7 +139,7 @@ public class App {
             }
 
             if (opcionPanel == 1) {
-                opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray);
+                opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray, indice);
 
             }
 
@@ -161,7 +167,7 @@ public class App {
 
                     System.out.println();
 
-                    for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                    for (int i = 0; i < indice[0]; i++) {
                         if (usuariosArray[i].isEmpty())
                             continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                                       // de error.
@@ -172,7 +178,7 @@ public class App {
                         // usuario
                     }
 
-                    for (int i = 0; i < Array.usuariosIndiceActual; i++) {
+                    for (int i = 0; i < indice[0]; i++) {
                         if (usuariosArray[i].isEmpty())
                             continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                                       // de error.
