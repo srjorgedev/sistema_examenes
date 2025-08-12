@@ -91,14 +91,30 @@ public class Administrador {
                     + usuarioNombre + ".-." + usuarioPass;
 
             try (Socket socket = new Socket("localhost", 5000);
-                    PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                    BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+     PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+     BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-            } catch (IOException e) {
-                System.out.println("Error al conectar con el servidor: " + e.getMessage());
-            }
+    // Mandar comando al servidor
+    salida.println("REGISTRO_USUARIO");
+    salida.println(nuevoUsuario); // Datos del usuario
+    salida.println("");
 
-            Array.agregarUsuario(usuariosArray, nuevoUsuario);
+    StringBuilder respuestaServidor = new StringBuilder();
+    String respuesta;
+    while ((respuesta = entrada.readLine()) != null) {
+        respuestaServidor.append(respuesta).append("\n");
+        if (respuesta.contains("=== Fin de consulta ===")) {
+            break;
+        }
+    }
+    String resultadoFinal = respuestaServidor.toString();
+
+} catch (IOException e) {
+    System.out.println("Error al conectar con el servidor: " + e.getMessage());
+}
+
+
+Array.agregarUsuario(usuariosArray, nuevoUsuario);
 
             if (opcionPanelCrear == 2 || opcionPanelCrear == 3) {
                 break;

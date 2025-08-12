@@ -660,7 +660,7 @@ public class App {
                                 salida.println("GUARDAR_EXAMENES");
                                 salida.println(nombreArchivo); // Nombre del archivo a crear
                                 salida.println(todosExamenes.toString()); // Todos los exámenes
-                                salida.println(""); // Línea vacía para indicar fin de datos
+                                salida.println(""); 
 
                                 String respuesta;
                                 while ((respuesta = entrada.readLine()) != null) {
