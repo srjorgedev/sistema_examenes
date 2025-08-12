@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class Administrador {
@@ -74,7 +79,6 @@ public class Administrador {
             Interfaz.imprimirTextoLineaSalto("1. Crear otro usuario");
             Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
             Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
-            Interfaz.imprimirTextoLineaSalto("4. Guardar exámenes en archivo"); 
             Interfaz.imprimirLineaInfIzqDer();
 
             System.out.print("  Ingrese su opcion: ");
@@ -86,12 +90,20 @@ public class Administrador {
             String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-."
                     + usuarioNombre + ".-." + usuarioPass;
 
+            try (Socket socket = new Socket("localhost", 5000);
+                    PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                    BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            } catch (IOException e) {
+                System.out.println("Error al conectar con el servidor: " + e.getMessage());
+            }
+
             Array.agregarUsuario(usuariosArray, nuevoUsuario);
 
             if (opcionPanelCrear == 2 || opcionPanelCrear == 3) {
                 break;
             }
-            
+
         }
 
         return opcionPanelCrear;
