@@ -74,7 +74,7 @@ public class Administrador {
             Interfaz.imprimirTextoLineaSalto("1. Crear otro usuario");
             Interfaz.imprimirTextoLineaSalto("2. Volver al panel de administrador");
             Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
-
+            Interfaz.imprimirTextoLineaSalto("4. Guardar exámenes en archivo"); 
             Interfaz.imprimirLineaInfIzqDer();
 
             System.out.print("  Ingrese su opcion: ");
@@ -91,6 +91,7 @@ public class Administrador {
             if (opcionPanelCrear == 2 || opcionPanelCrear == 3) {
                 break;
             }
+            
         }
 
         return opcionPanelCrear;

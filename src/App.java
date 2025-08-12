@@ -1,3 +1,7 @@
+import java.net.Socket;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class App {
@@ -126,6 +130,8 @@ public class App {
 
             if (opcionPanel == 1) {
                 opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray);
+              
+                }
 
                 if (opcionPanelCrear == 2) {
                     opcionPanel = 0;
@@ -136,6 +142,32 @@ public class App {
                     opcionInicio = 0;
                     opcionPanel = 0;
                     opcionPanelCrear = 0;
+                }
+                if (opcionPanel == 4){
+                      // ...ya tienes tipo, id, nombre, clave capturados...
+                String usuarioCompleto = usuariosArray[Array.usuariosIndiceActual - 1];
+
+                // Pedir el nombre del archivo para guardar en el servidor
+                System.out.print("Ingrese el nombre de archivo para guardar el usuario (ejemplo: usuario1.txt): ");
+                String nombreArchivo = scan.nextLine();
+
+                // Enviar al servidor
+                try (
+                        Socket socket = new Socket("localhost", 5000);
+                        PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                        BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                    salida.println("REGISTRO_USUARIO");
+                    salida.println(nombreArchivo); // Nombre del archivo a crear
+                    salida.println(usuarioCompleto); // Datos del usuario
+
+                    String respuesta;
+                    while ((respuesta = entrada.readLine()) != null) {
+                        System.out.println(respuesta);
+                        if (respuesta.contains("Usuario guardado"))
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error al conectar con el servidor: " + e.getMessage());
                 }
             }
 
@@ -582,7 +614,8 @@ public class App {
 
                         Interfaz.imprimirTextoLineaSalto("1. Crear otro examen");
                         Interfaz.imprimirTextoLineaSalto("2. Volver al panel docente");
-                        Interfaz.imprimirTextoLineaSalto("2. Volver al inicio");
+                        Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+                        Interfaz.imprimirTextoLineaSalto("4. Guardar exámenes en archivo"); // NUEVA OPCIÓN
                         Interfaz.imprimirLineaInfIzqDer();
 
                         System.out.print("  Ingrese su opcion: ");
@@ -600,6 +633,44 @@ public class App {
                             opcionInicio = 0;
                             opcionDocente = 0;
                             opcionCrearExamen = 0;
+                        }
+                        if (opcionCrearExamen == 4) {
+                            System.out.print(
+                                    "Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
+                            String nombreArchivo = scan.nextLine();
+
+                            // Une todos los exámenes en un solo String, separados por salto de línea
+                            StringBuilder todosExamenes = new StringBuilder();
+                            for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
+                                if (!examenInfoArray[i].isEmpty()) {
+                                    todosExamenes.append(examenInfoArray[i]).append("\n");
+                                    todosExamenes.append(examenPreguntasArray[i]).append("\n");
+                                    todosExamenes.append(examenReactivosArray[i]).append("\n");
+                                    todosExamenes.append(examenRespuestasArray[i]).append("\n");
+                                    todosExamenes.append("---\n"); // Separador entre exámenes
+                                }
+                            }
+
+                            // Enviar al servidor
+                            try (
+                                    Socket socket = new Socket("localhost", 5000);
+                                    PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                                    BufferedReader entrada = new BufferedReader(
+                                            new InputStreamReader(socket.getInputStream()))) {
+                                salida.println("GUARDAR_EXAMENES");
+                                salida.println(nombreArchivo); // Nombre del archivo a crear
+                                salida.println(todosExamenes.toString()); // Todos los exámenes
+                                salida.println(""); // Línea vacía para indicar fin de datos
+
+                                String respuesta;
+                                while ((respuesta = entrada.readLine()) != null) {
+                                    System.out.println(respuesta);
+                                    if (respuesta.contains("Examenes guardados"))
+                                        break;
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error al conectar con el servidor: " + e.getMessage());
+                            }
                         }
                     }
 
