@@ -76,3 +76,63 @@ D.-.0003.-.Jorge Sandoval.-.jorge12345
 ===== Nuevo Registro =====
 D.-.0004.-.Docente chido.-.claveacceso
 ---
+===== Nuevo Registro =====
+E.-.0000.-.admin.-.clave
+---
+===== Nuevo Registro =====
+E.-.0001.-.estudiante1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0002.-.profesor1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0003.-.Jorge Sandoval.-.jorge12345
+---
+===== Nuevo Registro =====
+D.-.0004.-.Docente chido.-.claveacceso
+---
+===== Nuevo Registro =====
+E.-.0000.-.admin.-.clave
+---
+===== Nuevo Registro =====
+E.-.0001.-.estudiante1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0002.-.profesor1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0003.-.Jorge Sandoval.-.jorge12345
+---
+===== Nuevo Registro =====
+D.-.0004.-.Docente chido.-.claveacceso
+---
+===== Nuevo Registro =====
+E.-.0000.-.admin.-.clave
+---
+===== Nuevo Registro =====
+E.-.0001.-.estudiante1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0002.-.profesor1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0003.-.Jorge Sandoval.-.jorge12345
+---
+===== Nuevo Registro =====
+D.-.0004.-.Docente chido.-.claveacceso
+---
+===== Nuevo Registro =====
+E.-.0000.-.admin.-.clave
+---
+===== Nuevo Registro =====
+E.-.0001.-.estudiante1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0002.-.profesor1.-.clave
+---
+===== Nuevo Registro =====
+D.-.0003.-.Jorge Sandoval.-.jorge12345
+---
+===== Nuevo Registro =====
+D.-.0004.-.Docente chido.-.claveacceso
+---

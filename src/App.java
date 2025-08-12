@@ -21,12 +21,12 @@ public class App {
         int temasIndiceActual = 0;
 
         int[] indice = {
-            0,          // Usuarios 
-            0,          // Historial usuarios
-            0,          // Examen - Informacion
-            0,          // Examen - Preguntas
-            0,          // Examen - Reactivos
-            0           // Examen - Respuestas
+                0, // Usuarios
+                0, // Historial usuarios
+                0, // Examen - Informacion
+                0, // Examen - Preguntas
+                0, // Examen - Reactivos
+                0 // Examen - Respuestas
         };
 
         // Array de uso para el apartado de Docente
@@ -141,84 +141,29 @@ public class App {
             if (opcionPanel == 1) {
                 opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray, indice);
 
-            }
+                if (opcionPanelCrear == 2) {
+                    opcionPanel = 0;
+                    opcionPanelCrear = 0;
+                }
 
-            if (opcionPanelCrear == 2) {
-                opcionPanel = 0;
-                opcionPanelCrear = 0;
-            }
-
-            if (opcionPanelCrear == 3) {
-                opcionInicio = 0;
-                opcionPanel = 0;
-                opcionPanelCrear = 0;
+                if (opcionPanelCrear == 3) {
+                    opcionInicio = 0;
+                    opcionPanel = 0;
+                    opcionPanelCrear = 0;
+                }
             }
 
             if (opcionPanel == 2) {
-                while (opcionAdministrar == 0
-                        || !(opcionAdministrar == 1 || opcionAdministrar == 2 || opcionAdministrar == 3)) {
-                    System.out.println();
-                    Interfaz.imprimirLineaSupIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
-                    Interfaz.imprimirLineaConexion();
+                opcionAdministrar = Administrador.mostrarUsuarios(scan, usuariosArray, indice);
 
-                    Interfaz.imprimirTextoLineaSalto("Tipo    ID       Nombre                 Clave");
-                    Interfaz.imprimirLineaInfIzqDer();
-
-                    System.out.println();
-
-                    for (int i = 0; i < indice[0]; i++) {
-                        if (usuariosArray[i].isEmpty())
-                            continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
-                                      // de error.
-
-                        String[] datos = usuariosArray[i].split(regex);
-                        if (datos[2].length() > nombreMasLargo)
-                            nombreMasLargo = datos[2].length() + 2; // Almacena la longitud del nombre mas largo de un
-                        // usuario
-                    }
-
-                    for (int i = 0; i < indice[0]; i++) {
-                        if (usuariosArray[i].isEmpty())
-                            continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
-                                      // de error.
-
-                        String[] datos = usuariosArray[i].split(regex);
-                        String usuarioTexto = "     " + datos[0] + "      " + datos[1] + " "
-                                + datos[2] + " ".repeat(nombreMasLargo - datos[2].length()) + "\t" + datos[3];
-                        System.out.println(usuarioTexto);
-                    }
-
-                    System.out.println();
-
-                    Interfaz.imprimirLineaSupIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
-                    Interfaz.imprimirTextoLineaSalto("1. Modificar usuario");
-                    Interfaz.imprimirTextoLineaSalto("2. Eliminar usuario");
-
-                    Interfaz.imprimirBordeIzqDer();
-                    Interfaz.imprimirTextoLineaSalto("3. Volver al panel de administrador");
-                    Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
-
-                    Interfaz.imprimirLineaInfIzqDer();
-
-                    System.out.print("  Ingrese su opcion: ");
-                    opcionAdministrar = scan.nextInt();
-                    scan.nextLine();
-
-                    System.out.println();
-
-                    if (opcionAdministrar == 3) {
-                        opcionPanel = 0;
-                        opcionAdministrar = 0;
-                        break;
-                    }
-                    if (opcionAdministrar == 4) {
-                        opcionInicio = 0;
-                        opcionPanel = 0;
-                        opcionAdministrar = 0;
-                        break;
-                    }
+                if (opcionAdministrar == 3) {
+                    opcionPanel = 0;
+                    opcionAdministrar = 0;
+                }
+                if (opcionAdministrar == 4) {
+                    opcionInicio = 0;
+                    opcionPanel = 0;
+                    opcionAdministrar = 0;
                 }
 
                 if (opcionAdministrar == 1) {
@@ -618,26 +563,27 @@ public class App {
                             opcionCrearExamen = 0;
                         }
                         if (opcionCrearExamen == 4) {
-                        System.out.print("Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
+                            System.out.print(
+                                    "Ingrese el nombre del archivo para guardar los exámenes (ejemplo: examenes.txt): ");
                             String nombreArchivo = scan.nextLine();
 
                             try (
-                                Socket socket = new Socket("localhost", 5000);
-                                PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                                BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-                            ) {
-                                salida.println("REGISTRO_EXAMENES");  
+                                    Socket socket = new Socket("localhost", 5000);
+                                    PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
+                                    BufferedReader entrada = new BufferedReader(
+                                            new InputStreamReader(socket.getInputStream()))) {
+                                salida.println("REGISTRO_EXAMENES");
                                 for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
                                     if (!examenInfoArray[i].isEmpty()) {
                                         salida.println(examenInfoArray[i]);
                                         salida.println(examenPreguntasArray[i]);
                                         salida.println(examenReactivosArray[i]);
                                         salida.println(examenRespuestasArray[i]);
-                                        salida.println("---"); 
+                                        salida.println("---");
                                     }
                                 }
 
-                                salida.println(""); 
+                                salida.println("");
                                 String respuesta;
                                 while ((respuesta = entrada.readLine()) != null) {
                                     System.out.println(respuesta);
@@ -650,112 +596,111 @@ public class App {
                                 System.out.println("Error al conectar con el servidor: " + e.getMessage());
                             }
                         }
-                                            
-                        }
+
                     }
+                }
 
-                    if (opcionDocente == 2) {
-                        int opcionVerExamenes;
+                if (opcionDocente == 2) {
+                    int opcionVerExamenes;
 
-                        Interfaz.imprimirTitulo("Examenes creados");
+                    Interfaz.imprimirTitulo("Examenes creados");
+                    Interfaz.imprimirBordeIzqDer();
+
+                    for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
+                        String[] examenInfo = examenInfoArray[i].split(regex);
+
+                        if (!(examenInfo[examenInfo.length - 1].equals(usuarioSesionActual)))
+                            continue;
+
+                        String[] examenPreguntas = examenPreguntasArray[i].split(regex);
+                        String[] examenReactivos = examenReactivosArray[i].split(regex);
+                        String[] examenRespuestas = examenRespuestasArray[i].split(regex);
+
+                        String tipo = "";
+                        if (examenInfo[3].toUpperCase().equals("O"))
+                            tipo = "Ordinario";
+                        if (examenInfo[3].toUpperCase().equals("R"))
+                            tipo = "Remedial";
+                        if (examenInfo[3].toUpperCase().equals("E"))
+                            tipo = "Extraordinario";
+
+                        Interfaz.imprimirTextoLineaSalto("Examen: " + examenInfo[0] + " - " + tipo);
+                        Interfaz.imprimirTextoLineaSalto("Creado por: " + examenInfo[5]);
+                        Interfaz.imprimirTextoLineaSalto(examenInfo[1] + " - " + examenInfo[4]);
+
+                        Interfaz.imprimirBordeIzqDer();
+                        Interfaz.imprimirTextoLineaSalto("Preguntas");
                         Interfaz.imprimirBordeIzqDer();
 
-                        for (int i = 0; i < Array.examenInfoIndiceActual; i++) {
-                            String[] examenInfo = examenInfoArray[i].split(regex);
+                        for (int j = 1; j < examenPreguntas.length; j++) {
+                            Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
+                            Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
 
-                            if (!(examenInfo[examenInfo.length - 1].equals(usuarioSesionActual)))
-                                continue;
+                            String respuestas = "";
+                            for (int k = 0; k < examenRespuestas[j].length(); k++) {
+                                if (examenRespuestas[k].isBlank())
+                                    continue;
 
-                            String[] examenPreguntas = examenPreguntasArray[i].split(regex);
-                            String[] examenReactivos = examenReactivosArray[i].split(regex);
-                            String[] examenRespuestas = examenRespuestasArray[i].split(regex);
-
-                            String tipo = "";
-                            if (examenInfo[3].toUpperCase().equals("O"))
-                                tipo = "Ordinario";
-                            if (examenInfo[3].toUpperCase().equals("R"))
-                                tipo = "Remedial";
-                            if (examenInfo[3].toUpperCase().equals("E"))
-                                tipo = "Extraordinario";
-
-                            Interfaz.imprimirTextoLineaSalto("Examen: " + examenInfo[0] + " - " + tipo);
-                            Interfaz.imprimirTextoLineaSalto("Creado por: " + examenInfo[5]);
-                            Interfaz.imprimirTextoLineaSalto(examenInfo[1] + " - " + examenInfo[4]);
+                                respuestas += examenRespuestas[j].charAt(k) + ") ";
+                            }
 
                             Interfaz.imprimirBordeIzqDer();
-                            Interfaz.imprimirTextoLineaSalto("Preguntas");
+                            Interfaz.imprimirTextoLineaSalto("Respuestas");
+                            Interfaz.imprimirTextoLineaSalto(respuestas);
                             Interfaz.imprimirBordeIzqDer();
-
-                            for (int j = 1; j < examenPreguntas.length; j++) {
-                                Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
-                                Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
-
-                                String respuestas = "";
-                                for (int k = 0; k < examenRespuestas[j].length(); k++) {
-                                    if (examenRespuestas[k].isBlank())
-                                        continue;
-
-                                    respuestas += examenRespuestas[j].charAt(k) + ") ";
-                                }
-
-                                Interfaz.imprimirBordeIzqDer();
-                                Interfaz.imprimirTextoLineaSalto("Respuestas");
-                                Interfaz.imprimirTextoLineaSalto(respuestas);
-                                Interfaz.imprimirBordeIzqDer();
-                            }
-
-                            Interfaz.imprimirLineaConexion();
                         }
 
-                        Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
-                        Interfaz.imprimirBordeIzqDer();
+                        Interfaz.imprimirLineaConexion();
+                    }
 
-                        Interfaz.imprimirTextoLineaSalto("1. Finalizar examen");
-                        Interfaz.imprimirTextoLineaSalto("2. Borrar examen");
-                        Interfaz.imprimirTextoLineaSalto("3. Volver al panel docente");
-                        Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+                    Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+                    Interfaz.imprimirBordeIzqDer();
 
-                        Interfaz.imprimirLineaInfIzqDer();
+                    Interfaz.imprimirTextoLineaSalto("1. Finalizar examen");
+                    Interfaz.imprimirTextoLineaSalto("2. Borrar examen");
+                    Interfaz.imprimirTextoLineaSalto("3. Volver al panel docente");
+                    Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
 
-                        System.out.print("  Ingrese su opcion: ");
-                        opcionVerExamenes = scan.nextInt();
-                        scan.nextLine();
+                    Interfaz.imprimirLineaInfIzqDer();
 
-                        System.out.println();
+                    System.out.print("  Ingrese su opcion: ");
+                    opcionVerExamenes = scan.nextInt();
+                    scan.nextLine();
 
-                        if (opcionDocente == 3) {
-                            System.out.print("Nombre del curso: ");
-                            String nuevoCurso = scan.nextLine();
+                    System.out.println();
 
-                            if (cursosIndiceActual < cursosArray.length) {
-                                cursosArray[cursosIndiceActual] = nuevoCurso;
-                                cursosIndiceActual++;
-                                System.out.println("Curso agregado correctamente.");
-                            } else {
-                                System.out.println("No hay espacio para más cursos.");
-                            }
-                        }
+                    if (opcionDocente == 3) {
+                        System.out.print("Nombre del curso: ");
+                        String nuevoCurso = scan.nextLine();
 
-                        if (opcionDocente == 4) {
-                            System.out.print("Nombre del tema: ");
-                            String nuevoTema = scan.nextLine();
-
-                            if (temasIndiceActual < temasArray.length) {
-                                temasArray[temasIndiceActual] = nuevoTema;
-                                temasIndiceActual++;
-                                System.out.println("Tema agregado correctamente.");
-                            } else {
-                                System.out.println("No hay espacio para más temas.");
-                            }
+                        if (cursosIndiceActual < cursosArray.length) {
+                            cursosArray[cursosIndiceActual] = nuevoCurso;
+                            cursosIndiceActual++;
+                            System.out.println("Curso agregado correctamente.");
+                        } else {
+                            System.out.println("No hay espacio para más cursos.");
                         }
                     }
 
-                    if (opcionDocente == 5) {
-                        opcionDocente = 0; // Regresa al inicio
-                        break;
+                    if (opcionDocente == 4) {
+                        System.out.print("Nombre del tema: ");
+                        String nuevoTema = scan.nextLine();
+
+                        if (temasIndiceActual < temasArray.length) {
+                            temasArray[temasIndiceActual] = nuevoTema;
+                            temasIndiceActual++;
+                            System.out.println("Tema agregado correctamente.");
+                        } else {
+                            System.out.println("No hay espacio para más temas.");
+                        }
                     }
+                }
+
+                if (opcionDocente == 5) {
+                    opcionDocente = 0; // Regresa al inicio
+                    break;
                 }
             }
         }
-    } //
-
+    }
+} //

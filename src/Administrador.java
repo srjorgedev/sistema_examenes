@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Scanner;
 
 public class Administrador {
     public static int menuAdmin(Scanner scan) {
@@ -102,7 +103,68 @@ public class Administrador {
 
     // public static void iniciarSesion() {}
 
-    // public static int mostrarUsuarios() {
+    public static int mostrarUsuarios(Scanner scan, String[] usuariosArray, int[] indices) {
+        String regex = "\\.-\\.";
 
-    // }
+        int nombreMasLargo = 0;
+        int opcionAdministrar = 0;
+
+        while (opcionAdministrar == 0
+                || !(opcionAdministrar == 1 || opcionAdministrar == 2 || opcionAdministrar == 3)) {
+            System.out.println();
+            Interfaz.imprimirLineaSupIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
+            Interfaz.imprimirLineaConexion();
+
+            Interfaz.imprimirTextoLineaSalto("Tipo    ID       Nombre                 Clave");
+            Interfaz.imprimirLineaInfIzqDer();
+
+            System.out.println();
+
+            for (int i = 0; i < indices[0]; i++) {
+                if (usuariosArray[i].isEmpty())
+                    continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
+                              // de error.
+
+                String[] datos = usuariosArray[i].split(regex);
+                if (datos[2].length() > nombreMasLargo)
+                    nombreMasLargo = datos[2].length() + 2; // Almacena la longitud del nombre mas largo de un
+                // usuario
+            }
+
+            for (int i = 0; i < indices[0]; i++) {
+                if (usuariosArray[i].isEmpty())
+                    continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
+                              // de error.
+
+                String[] datos = usuariosArray[i].split(regex);
+                String usuarioTexto = "     " + datos[0] + "      " + datos[1] + " "
+                        + datos[2] + " ".repeat(nombreMasLargo - datos[2].length()) + "\t" + datos[3];
+                System.out.println(usuarioTexto);
+            }
+
+            System.out.println();
+
+            Interfaz.imprimirLineaSupIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+            Interfaz.imprimirTextoLineaSalto("1. Modificar usuario");
+            Interfaz.imprimirTextoLineaSalto("2. Eliminar usuario");
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("3. Volver al panel de administrador");
+            Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+
+            Interfaz.imprimirLineaInfIzqDer();
+
+            System.out.print("  Ingrese su opcion: ");
+            opcionAdministrar = scan.nextInt();
+            scan.nextLine();
+
+            System.out.println();
+
+            if (opcionAdministrar == 3 || opcionAdministrar == 4) break;
+        }
+
+        return opcionAdministrar;
+    }
 }
