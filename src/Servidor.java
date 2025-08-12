@@ -5,7 +5,7 @@ import java.net.*;
 public class Servidor {
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(5000)) {
-            System.out.println("Servidor iniciado en puerto 5000...");
+            System.out.println("Conexion al servidor exitosa...");
 
             while (true) {
                 try (Socket socket = serverSocket.accept();
