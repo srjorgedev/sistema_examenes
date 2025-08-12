@@ -10,9 +10,11 @@ public class Array {
     static int examenReactivosIndiceActual = 0;
     static int examenRespuestasIndiceActual = 0;
 
-    public static void agregarUsuario(String[] array, String datos) {
-        array[usuariosIndiceActual] = datos;
-        usuariosIndiceActual++;
+    public static void agregarUsuario(String[] array, String datos, int[] indices) {
+        FuncionesServidor.guardarUsuario(datos);
+
+        array[indices[0]] = datos;
+        indices[0]++;
     }
 
     public static void agregarExamenInformacion(String[] array, String datos) {

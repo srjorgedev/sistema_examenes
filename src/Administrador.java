@@ -38,7 +38,7 @@ public class Administrador {
         return opcionPanel;
     }
 
-    public static int crearUsuario(Scanner scan, String[] usuariosArray) {
+    public static int crearUsuario(Scanner scan, String[] usuariosArray, int[] indices) {
         int opcionPanelCrear = 0;
         String usuarioId, usuarioTipo, usuarioNombre, usuarioPass;
 
@@ -46,8 +46,8 @@ public class Administrador {
                 || opcionPanelCrear == 1
                 || !(opcionPanelCrear >= 2 && opcionPanelCrear <= 3)) {
 
-            usuarioId = "0".repeat(4 - String.valueOf(Array.usuariosIndiceActual).length())
-                    + Array.usuariosIndiceActual;
+            usuarioId = "0".repeat(4 - String.valueOf(indices[0]).length())
+                    + indices[0];
 
             System.out.println();
             Interfaz.imprimirLineaSupIzqDer();
@@ -90,40 +90,17 @@ public class Administrador {
             String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-."
                     + usuarioNombre + ".-." + usuarioPass;
 
-            try (Socket socket = new Socket("localhost", 5000);
-     PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-     BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-
-    // Mandar comando al servidor
-    salida.println("REGISTRO_USUARIO");
-    salida.println(nuevoUsuario); // Datos del usuario
-    salida.println("");
-
-    StringBuilder respuestaServidor = new StringBuilder();
-    String respuesta;
-    while ((respuesta = entrada.readLine()) != null) {
-        respuestaServidor.append(respuesta).append("\n");
-        if (respuesta.contains("=== Fin de consulta ===")) {
-            break;
-        }
-    }
-    String resultadoFinal = respuestaServidor.toString();
-
-} catch (IOException e) {
-    System.out.println("Error al conectar con el servidor: " + e.getMessage());
-}
-
-
-Array.agregarUsuario(usuariosArray, nuevoUsuario);
+            Array.agregarUsuario(usuariosArray, nuevoUsuario, indices);
 
             if (opcionPanelCrear == 2 || opcionPanelCrear == 3) {
                 break;
             }
-
         }
 
         return opcionPanelCrear;
     }
+
+    // public static void iniciarSesion() {}
 
     // public static int mostrarUsuarios() {
 
