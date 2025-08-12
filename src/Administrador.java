@@ -301,11 +301,14 @@ public class Administrador {
 
             System.out.println();
 
-            if (borrarOpcion == 1)
-                Array.borrar(usuariosArray, indiceBorrar);
+            Interfaz.imprimirLineaSupIzqDer();
 
-            Interfaz.imprimirLineaConexion();
-            Interfaz.imprimirTextoLineaSalto("Usuario borrado correctamente.");
+            if (borrarOpcion == 1) {
+                Array.borrar(usuariosArray, indiceBorrar);
+                Interfaz.imprimirTextoLineaSalto("Usuario borrado correctamente.");
+            } else if (borrarOpcion == 2) {
+                Interfaz.imprimirTextoLineaSalto("Accion cancelada.");
+            }
 
             Interfaz.imprimirLineaConexion();
             Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
