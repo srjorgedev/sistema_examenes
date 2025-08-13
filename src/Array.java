@@ -17,24 +17,29 @@ public class Array {
         indices[0]++;
     }
 
-    public static void agregarExamenInformacion(String[] array, String datos) {
-        array[examenInfoIndiceActual] = datos;
-        examenInfoIndiceActual++;
+    public static void agregarExamen(String[][] examen, String[] datos, int[] indices) {
+        examen[indices[2]][0] = datos[0];
+        examen[indices[2]][1] = datos[1];
+        examen[indices[2]][2] = datos[2];
+        examen[indices[2]][3] = datos[3];
+
+        indices[2]++;
     }
 
-    public static void agregarExamenPreguntas(String[] array, String datos) {
-        array[examenPreguntasIndiceActual] = datos;
-        examenPreguntasIndiceActual++;
+    public static void agregarExamenInformacion(String[][] array, String datos, int[] indices) {
+        array[indices[2]][0] = datos;
     }
 
-    public static void agregarExamenReactivos(String[] array, String datos) {
-        array[examenReactivosIndiceActual] = datos;
-        examenReactivosIndiceActual++;
+    public static void agregarExamenPreguntas(String[][] array, String datos, int[] indices) {
+        array[indices[2]][1] = datos;
     }
 
-    public static void agregarExamenRespuestas(String[] array, String datos) {
-        array[examenRespuestasIndiceActual] = datos;
-        examenRespuestasIndiceActual++;
+    public static void agregarExamenReactivos(String[][] array, String datos, int[] indices) {
+        array[indices[2]][2] = datos;
+    }
+
+    public static void agregarExamenRespuestas(String[][] array, String datos, int[] indices) {
+        array[indices[2]][3] = datos;
     }
 
     public static void agregar(String[] array, int indice, String datos) {

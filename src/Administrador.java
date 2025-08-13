@@ -95,8 +95,6 @@ public class Administrador {
         return opcionPanelCrear;
     }
 
-    // public static void iniciarSesion() {}
-
     public static int mostrarUsuarios(Scanner scan, String[] usuariosArray, int[] indices) {
         String regex = "\\.-\\.";
 
@@ -110,7 +108,7 @@ public class Administrador {
             Interfaz.imprimirTextoLineaSalto("Administrar Usuarios");
             Interfaz.imprimirLineaConexion();
 
-            Interfaz.imprimirTextoLineaSalto("Tipo    ID       Nombre                 Clave");
+            Interfaz.imprimirTextoLineaSalto("Tipo    ID   Nombre                 Clave");
             Interfaz.imprimirLineaInfIzqDer();
 
             System.out.println();
@@ -342,5 +340,67 @@ public class Administrador {
         }
 
         return opcionBorrar;
+    }
+
+    public static int iniciarSesion(Scanner scan, String[] usuario, String[] usuariosArray, int[] indice) {
+        boolean usuarioEncontrado = false;
+        String usuarioSesionID, usuarioSesionClave;
+        String regex = "\\.-\\.";
+        int opcionIniciarSesion;
+
+        System.out.println();
+        Interfaz.imprimirTitulo("Iniciar sesion");
+
+        Interfaz.imprimirTextoLineaSalto("Nota: El formato de usuarios son 4 digitos numericos");
+        Interfaz.imprimirTextoLineaSalto("Por ejemplo: 0000");
+        Interfaz.imprimirLineaConexion();
+        Interfaz.imprimirBordeIzqDer();
+
+        do {
+            System.out.print("    Usuario: ");
+            usuarioSesionID = scan.nextLine();
+        } while (!usuarioSesionID.matches("^\\d{4}$"));
+
+        do {
+            System.out.print("    Clave: ");
+            usuarioSesionClave = scan.nextLine();
+        } while (usuarioSesionClave.isBlank());
+
+        for (int i = 0; i < indice[0]; i++) {
+            String[] datos = usuariosArray[i].split(regex);
+
+            if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
+                usuarioEncontrado = true;
+
+                usuario[2] = datos[0];
+                usuario[0] = datos[1];
+                usuario[1] = datos[2];
+                break;
+            }
+        }
+
+        Interfaz.imprimirBordeIzqDer();
+        Interfaz.imprimirLineaConexion();
+
+        if (usuarioEncontrado) {
+            Interfaz.imprimirTextoLineaSalto("Sesion iniciada.");
+            Interfaz.imprimirLineaInfIzqDer();
+
+            return 0;
+        }
+
+        Interfaz.imprimirTextoLineaSalto("Usuario o clave incorrectos.");
+        Interfaz.imprimirLineaConexion();
+        Interfaz.imprimirTextoLineaSalto("1. Intentar de nuevo");
+        Interfaz.imprimirTextoLineaSalto("2. Volver al inicio");
+        Interfaz.imprimirLineaInfIzqDer();
+
+        System.out.print("  Ingrese su opcion: ");
+        opcionIniciarSesion = scan.nextInt();
+        scan.nextLine();
+
+        System.out.println();
+
+        return opcionIniciarSesion;
     }
 }
