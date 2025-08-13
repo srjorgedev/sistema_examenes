@@ -1,7 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class App {
@@ -41,16 +37,12 @@ public class App {
         // Array de uso para el apartado de Docente
 
         // Leer los archivos guardados
-        String[] usuariosArchivo = FuncionesServidor.leerArchivo("Usuarios");
+        // String[] usuariosArchivo = FuncionesServidor.leerArchivo("Usuarios");
 
         Datos.crearUsuarios(usuariosArray, indice);
 
         // Crear datos de ejemplo
         Datos.crearExamenes(examenMatriz, indice);
-
-        // Variables de gestion del usuario actual
-        String usuarioSesionActual = "", usuarioSesionClave = "", usuarioSesionID = "", usuarioSesionNombre = "",
-                usuarioSesionTipo = "";
 
         // Instancia del Scanner
         Scanner scan = new Scanner(System.in);
@@ -59,7 +51,6 @@ public class App {
         int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0,
                 opcionProfesor = 0, opcionAdministrar = 0, opcionIniciarSesion = 0, opcionBorrar = 0,
                 opcionCrearExamen = 0;
-        int nombreMasLargo = 0;
 
         while (true) {
             while (opcionInicio == 0
@@ -167,18 +158,18 @@ public class App {
                 }
 
                 case 2: {
-                    int opcionEstudiante;
+                    int opcionEstudiante, opcionAdministrarPerfil;
 
                     opcionEstudiante = Estudiante.mostrarMenu(scan);
 
-                    // switch (opcionEstudiante) {
-                    //     case value:
-                            
-                    //         break;
-                    
-                    //     default:
-                    //         break;
-                    // }
+                    switch (opcionEstudiante) {
+                        case 1:
+                            opcionAdministrarPerfil = Estudiante.administrarPerfil(scan);
+                            break;
+
+                        default:
+                            break;
+                    }
 
                 }
 
