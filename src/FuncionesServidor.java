@@ -6,65 +6,54 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class FuncionesServidor {
-    public static void guardarUsuario(String usuario) {
-        try (Socket socket = new Socket("localhost", 5000);
-                PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+    public static String subirAlServidor(PrintWriter out, BufferedReader in, String comando, String datos)
+            throws IOException {
+        out.println(comando.toUpperCase());
+        out.println(datos);
 
-            // Mandar comando al servidor
-            salida.println("REGISTRO_USUARIO");
-            salida.println(usuario); // Datos del usuario
-            salida.println("");
-
-            StringBuilder respuestaServidor = new StringBuilder();
-            String respuesta;
-            while ((respuesta = entrada.readLine()) != null) {
-                respuestaServidor.append(respuesta).append("\n");
-                if (respuesta.contains("=== Fin de consulta ===")) {
-                    break;
-                }
-            }
-            String resultadoFinal = respuestaServidor.toString();
-
-        } catch (IOException e) {
-            System.out.println("Error al conectar con el servidor: " + e.getMessage());
+        StringBuilder respuestaServidor = new StringBuilder();
+        String linea;
+        while ((linea = in.readLine()) != null) {
+            if (linea.equals("=== Fin de consulta ==="))
+                break;
+            respuestaServidor.append(linea).append("\n");
         }
+
+        return respuestaServidor.toString().trim();
     }
 
-    public static String[] leerArchivo(String archivo) {
-        String rutaArchivo = "./" + archivo + ".txt";
+    public static String subirAlServidor(PrintWriter out, BufferedReader in, String comando, String datos[])
+            throws IOException {
+        out.println(comando.toUpperCase());
 
-        int numeroLineas = 0;
-        String[] usuarios;
-
-        // Contamos el número de líneas
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
-            while (br.readLine() != null) {
-                numeroLineas++;
-            }
-        } catch (IOException e) {
-            System.err.println("Error al contar líneas: " + e.getMessage());
-            return usuarios = new String[0];
+        for (String dato : datos) {
+            out.println(dato);
         }
 
-        // Creamos el array con el tamaño exacto
-        usuarios = new String[numeroLineas];
-
-        // Luego, leemos el archivo de nuevo y guardamos cada línea en el array
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
-            for (int i = 0; i < numeroLineas; i++) {
-                usuarios[i] = br.readLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
-            return usuarios = new String[0];
+        StringBuilder respuestaServidor = new StringBuilder();
+        String linea;
+        while ((linea = in.readLine()) != null) {
+            if (linea.equals("=== Fin de consulta ==="))
+                break;
+            respuestaServidor.append(linea).append("\n");
         }
 
-        // Imprimimos el array para verificar
-        for (String linea : usuarios) {
-            System.out.println(linea);
-        }
-
-        return usuarios;
+        return respuestaServidor.toString().trim();
     }
+
+    public static String obtenerDelServidor(PrintWriter out, BufferedReader in, String comando)
+            throws IOException {
+        out.println(comando.toUpperCase());
+
+        StringBuilder respuestaServidor = new StringBuilder();
+        String linea;
+        while ((linea = in.readLine()) != null) {
+            if (linea.equals("=== Fin de consulta ==="))
+                break;
+            respuestaServidor.append(linea).append("\n");
+        }
+
+        return respuestaServidor.toString().trim();
+    }
+
 }

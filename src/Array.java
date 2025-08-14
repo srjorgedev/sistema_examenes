@@ -11,8 +11,6 @@ public class Array {
     static int examenRespuestasIndiceActual = 0;
 
     public static void agregarUsuario(String[] array, String datos, int[] indices) {
-        FuncionesServidor.guardarUsuario(datos);
-
         array[indices[0]] = datos;
         indices[0]++;
     }
@@ -26,20 +24,9 @@ public class Array {
         indices[2]++;
     }
 
-    public static void agregarExamenInformacion(String[][] array, String datos, int[] indices) {
-        array[indices[2]][0] = datos;
-    }
-
-    public static void agregarExamenPreguntas(String[][] array, String datos, int[] indices) {
-        array[indices[2]][1] = datos;
-    }
-
-    public static void agregarExamenReactivos(String[][] array, String datos, int[] indices) {
-        array[indices[2]][2] = datos;
-    }
-
-    public static void agregarExamenRespuestas(String[][] array, String datos, int[] indices) {
-        array[indices[2]][3] = datos;
+    public static void agregarHistorial(String[] array, String datos, int[] indices) {
+        array[indices[1]] = datos;
+        indices[1]++;
     }
 
     public static void agregar(String[] array, int indice, String datos) {

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -28,7 +29,8 @@ public class Docente {
         return opcionDocente;
     }
 
-    public static int crearExamen(Scanner scan, String[][] examen, String[] usuario, int[] indice) {
+    public static int crearExamen(Scanner scan, String[] usuario, PrintWriter out, BufferedReader in)
+            throws IOException {
         String examenInformacion = "";
         String examenPreguntas = "";
         String examenRespuestas = "";
@@ -39,8 +41,11 @@ public class Docente {
 
         int opcionCrearExamen = 0;
 
+        int examenIndiceActual = Integer
+                .parseInt(FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_EXAMEN_INDICE_ACTUAL"));
+
         Interfaz.imprimirTitulo("Crear Examen");
-        String examenID = "EX0" + indice[2];
+        String examenID = "EX0" + examenIndiceActual;
 
         System.out.print("    Nombre del examen: ");
         String nombre = scan.nextLine();
@@ -176,52 +181,12 @@ public class Docente {
             preguntaIndice++;
         }
 
-        Array.agregarExamen(examen, new String[] {
+        String crearExamen = FuncionesServidor.subirAlServidor(out, in, "CREAR_EXAMEN", new String[] {
                 examenInformacion,
                 examenPreguntas,
                 examenReactivos,
                 examenRespuestas
-        }, indice);
-
-        System.out.println(examen[indice[2] - 1][0]);
-        System.out.println(examen[indice[2] - 1][1]);
-        System.out.println(examen[indice[2] - 1][2]);
-        System.out.println(examen[indice[2] - 1][3]);
-
-        try (
-                Socket socket = new Socket("localhost", 5000);
-                PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader entrada = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()))) {
-            salida.println("REGISTRO_EXAMENES");
-            for (int i = 0; i < indice[2]; i++) {
-                if (!examen[i][0].isEmpty()) {
-                    salida.println(examen[i][0]);
-                    salida.println(examen[i][1]);
-                    salida.println(examen[i][2]);
-                    salida.println(examen[i][3]);
-                    salida.println("---");
-                }
-            }
-
-            salida.println("");
-            String respuesta;
-            while ((respuesta = entrada.readLine()) != null) {
-                System.out.println(respuesta);
-                if (respuesta.contains("Examen guardado correctamente")) {
-                    break;
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error al conectar con el servidor: " + e.getMessage());
-        }
-
-        // OUTPUT
-        // EX00.-.Prueba.-.29/07/27.-.O.-.Materia.-.admin.-.0000
-        // EX00.-.o-Pregunta 1.-.s-Pregunta 2
-        // EX00.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.
-        // EX00.-.a.-.abc.-.
+        });
 
         Interfaz.imprimirTextoLineaSalto("Examen creado.");
 
@@ -241,5 +206,91 @@ public class Docente {
         System.out.println();
 
         return opcionCrearExamen;
+    }
+
+    public static int mostrarExamenes(Scanner scan, String[] usuario, PrintWriter out, BufferedReader in)
+            throws IOException {
+
+        int opcionVerExamenes = 0;
+        String regex = "\\.-\\.";
+
+        int examenIndiceActual = Integer
+                .parseInt(FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_EXAMEN_INDICE_ACTUAL"));
+
+        String respuesta = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_EXAMENES");
+        String[] filas = respuesta.split("\n");
+
+        String[][] examenMatriz = new String[filas.length][];
+        for (int i = 0; i < filas.length; i++) {
+            examenMatriz[i] = filas[i].split(";");
+        }
+
+        Interfaz.imprimirTitulo("Examenes creados");
+        Interfaz.imprimirBordeIzqDer();
+
+        for (int i = 0; i < examenIndiceActual; i++) {
+            String[] examenInfo = examenMatriz[i][0].split(regex);
+
+            if (!(examenInfo[examenInfo.length - 1].equals(usuario[0])) && !usuario[0].equals("0000"))
+                continue;
+
+            String[] examenPreguntas = examenMatriz[i][1].split(regex);
+            String[] examenReactivos = examenMatriz[i][2].split(regex);
+            String[] examenRespuestas = examenMatriz[i][3].split(regex);
+
+            String tipo = "";
+            if (examenInfo[3].toUpperCase().equals("O"))
+                tipo = "Ordinario";
+            if (examenInfo[3].toUpperCase().equals("R"))
+                tipo = "Remedial";
+            if (examenInfo[3].toUpperCase().equals("E"))
+                tipo = "Extraordinario";
+
+            Interfaz.imprimirTextoLineaSalto("Examen: " + examenInfo[0] + " - " + tipo);
+            Interfaz.imprimirTextoLineaSalto("Creado por: " + examenInfo[5]);
+            Interfaz.imprimirTextoLineaSalto(examenInfo[1] + " - " + examenInfo[4]);
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Preguntas");
+            Interfaz.imprimirBordeIzqDer();
+
+            for (int j = 1; j < examenPreguntas.length; j++) {
+                Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
+                Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
+
+                String respuestas = "";
+                for (int k = 0; k < examenRespuestas[j].length(); k++) {
+                    if (examenRespuestas[k].isBlank())
+                        continue;
+
+                    respuestas += examenRespuestas[j].charAt(k) + ") ";
+                }
+
+                Interfaz.imprimirBordeIzqDer();
+                Interfaz.imprimirTextoLineaSalto("Respuestas");
+                Interfaz.imprimirTextoLineaSalto(respuestas);
+                Interfaz.imprimirBordeIzqDer();
+            }
+
+            Interfaz.imprimirLineaConexion();
+        }
+
+        Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
+        Interfaz.imprimirBordeIzqDer();
+
+        Interfaz.imprimirTextoLineaSalto("1. Finalizar examen");
+        Interfaz.imprimirTextoLineaSalto("2. Borrar examen");
+        Interfaz.imprimirTextoLineaSalto("3. Volver al panel docente");
+        Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+
+        Interfaz.imprimirLineaInfIzqDer();
+
+        System.out.print("  Ingrese su opcion: ");
+        opcionVerExamenes = scan.nextInt();
+        scan.nextLine();
+
+        System.out.println();
+
+        return opcionVerExamenes;
     }
 }

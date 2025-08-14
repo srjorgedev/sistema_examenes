@@ -11,9 +11,9 @@ public class Datos {
 
     public static void crearExamenes(String[][] examen, int[] indices) {
         Array.agregarExamen(examen, new String[] {
-                "EX00.-.Prueba.-.29/07/27.-.O.-.Materia.-.admin.-.0000",
-                "EX00.-.o - Pregunta 1.-.s - Pregunta 2",
-                "EX00.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.",
+                "EX00.-.Diagnostico 1.-.29/07/27.-.O.-.Matematicas.-.admin.-.0000",
+                "EX00.-.o - 1 + 1.-.s - Numeros menores a 10",
+                "EX00.-.a)2 b)3 c)4 d)5.-.a)1 b)2 c)4 d)14 e)10.-.",
                 "EX00.-.a.-.abc.-."
         }, indices);
 
@@ -30,30 +30,6 @@ public class Datos {
                 "EX02.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.",
                 "EX02.-.a.-.abc.-."
         }, indices);
-    }
-
-    public static void crearExamenInformacion(String[][] array, int[] indices) {
-        Array.agregarExamenInformacion(array, "EX00.-.Prueba.-.29/07/27.-.O.-.Materia.-.admin.-.0000", indices);
-        Array.agregarExamenInformacion(array, "EX01.-.Prueba 2.-.29/07/27.-.O.-.Materia.-.admin.-.0000", indices);
-        Array.agregarExamenInformacion(array, "EX02.-.Prueba 3.-.29/07/27.-.O.-.Materia.-.admin.-.0001", indices);
-    }
-
-    public static void crearExamenPreguntas(String[][] array, int[] indices) {
-        Array.agregarExamenPreguntas(array, "EX00.-.o - Pregunta 1.-.s - Pregunta 2", indices);
-        Array.agregarExamenPreguntas(array, "EX01.-.o - Pregunta 1.-.s - Pregunta 2", indices);
-        Array.agregarExamenPreguntas(array, "EX02.-.o - Pregunta 1.-.s - Pregunta 2", indices);
-    }
-
-    public static void crearExamenReactivos(String[][] array, int[] indices) {
-        Array.agregarExamenReactivos(array, "EX00.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.", indices);
-        Array.agregarExamenReactivos(array, "EX01.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.", indices);
-        Array.agregarExamenReactivos(array, "EX02.-.a)A b)B c)C d)D.-.a)A b)V c)B d)C e)D.-.", indices);
-    }
-
-    public static void crearExamenRespuestas(String[][] array, int[] indices) {
-        Array.agregarExamenRespuestas(array, "EX00.-.a.-.abc.-.", indices);
-        Array.agregarExamenRespuestas(array, "EX01.-.a.-.abc.-.", indices);
-        Array.agregarExamenRespuestas(array, "EX02.-.a.-.abc.-.", indices);
     }
 
     // EX00.-.Prueba.-.29/07/27.-.O.-.Materia.-.admin.-.0000

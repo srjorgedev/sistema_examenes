@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Administrador {
@@ -33,7 +36,7 @@ public class Administrador {
         return opcionPanel;
     }
 
-    public static int crearUsuario(Scanner scan, String[] usuariosArray, int[] indices) {
+    public static int crearUsuario(Scanner scan, PrintWriter out, BufferedReader in) throws IOException {
         int opcionPanelCrear = 0;
         String usuarioId, usuarioTipo, usuarioNombre, usuarioPass;
 
@@ -41,8 +44,10 @@ public class Administrador {
                 || opcionPanelCrear == 1
                 || !(opcionPanelCrear >= 2 && opcionPanelCrear <= 3)) {
 
-            usuarioId = "0".repeat(4 - String.valueOf(indices[0]).length())
-                    + indices[0];
+            String usuarioIndiceActual = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_USUARIO_INDICE_ACTUAL");
+
+            usuarioId = "0".repeat(4 - String.valueOf(usuarioIndiceActual).length())
+                    + usuarioIndiceActual;
 
             System.out.println();
             Interfaz.imprimirLineaSupIzqDer();
@@ -68,6 +73,11 @@ public class Administrador {
             System.out.print("    Clave: ");
             usuarioPass = scan.nextLine();
 
+            String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-."
+                    + usuarioNombre + ".-." + usuarioPass;
+
+            String subirUsuario = FuncionesServidor.subirAlServidor(out, in, "REGISTRO_USUARIO", nuevoUsuario);
+
             Interfaz.imprimirLineaConexion();
             Interfaz.imprimirTextoLineaSalto("Usuario creado.");
             Interfaz.imprimirLineaConexion();
@@ -82,11 +92,6 @@ public class Administrador {
 
             System.out.println();
 
-            String nuevoUsuario = usuarioTipo.toUpperCase() + ".-." + usuarioId + ".-."
-                    + usuarioNombre + ".-." + usuarioPass;
-
-            Array.agregarUsuario(usuariosArray, nuevoUsuario, indices);
-
             if (opcionPanelCrear == 2 || opcionPanelCrear == 3) {
                 break;
             }
@@ -95,11 +100,14 @@ public class Administrador {
         return opcionPanelCrear;
     }
 
-    public static int mostrarUsuarios(Scanner scan, String[] usuariosArray, int[] indices) {
+    public static int mostrarUsuarios(Scanner scan, PrintWriter out, BufferedReader in) throws IOException {
         String regex = "\\.-\\.";
 
         int nombreMasLargo = 0;
         int opcionAdministrar = 0;
+
+        String usuarios = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_USUARIOS");
+        String[] usuariosArray = usuarios.split("\n");
 
         while (opcionAdministrar == 0
                 || !(opcionAdministrar == 1 || opcionAdministrar == 2 || opcionAdministrar == 3)) {
@@ -113,7 +121,7 @@ public class Administrador {
 
             System.out.println();
 
-            for (int i = 0; i < indices[0]; i++) {
+            for (int i = 0; i < usuariosArray.length; i++) {
                 if (usuariosArray[i].isEmpty())
                     continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                               // de error.
@@ -124,7 +132,7 @@ public class Administrador {
                 // usuario
             }
 
-            for (int i = 0; i < indices[0]; i++) {
+            for (int i = 0; i < usuariosArray.length; i++) {
                 if (usuariosArray[i].isEmpty())
                     continue; // Si el valor del array esta vacio pasa a la siguiente iteracion, para que no
                               // de error.
@@ -161,12 +169,15 @@ public class Administrador {
         return opcionAdministrar;
     }
 
-    public static int modificarUsuario(Scanner scan, String[] usuariosArray, int[] indices) {
+    public static int modificarUsuario(Scanner scan, PrintWriter out, BufferedReader in) throws IOException {
         String regex = "\\.-\\."; // Expresion regular para separar los string que estan unidos por .-. en un
                                   // array
 
         int opcionAdministrar = 0;
         String idModificar;
+
+        String usuarios = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_USUARIOS");
+        String[] usuariosArray = usuarios.split("\n");
 
         Interfaz.imprimirTitulo("Modificar Usuario");
         Interfaz.imprimirBordeIzqDer();
@@ -178,7 +189,7 @@ public class Administrador {
 
         boolean usuarioEncontrado = false;
 
-        for (int i = 0; i < indices[0]; i++) {
+        for (int i = 0; i < usuariosArray.length; i++) {
             String[] datos = usuariosArray[i].split(regex);
 
             if (datos[1].equals(idModificar)) {
@@ -206,7 +217,11 @@ public class Administrador {
                     datos[3] = nuevaClave;
 
                 String nuevoUsuario = datos[0] + ".-." + datos[1] + ".-." + datos[2] + ".-." + datos[3];
-                Array.modificar(usuariosArray, i, nuevoUsuario);
+
+                String modificarUsuario = FuncionesServidor.subirAlServidor(out, in, "MODIFICAR_USUARIO", new String[] {
+                        nuevoUsuario,
+                        String.valueOf(i)
+                });
 
                 Interfaz.imprimirLineaConexion();
                 Interfaz.imprimirTextoLineaSalto("Usuario modificado correctamente.");
@@ -245,7 +260,6 @@ public class Administrador {
             scan.nextLine();
 
             System.out.println();
-
         }
 
         return opcionAdministrar;
@@ -266,7 +280,7 @@ public class Administrador {
         boolean usuarioEncontrado = false;
         String[] datos = null;
 
-        for (int i = 0; i < indices[0]; i++) {
+        for (int i = 0; i < usuariosArray.length; i++) {
             if (usuariosArray[i].isEmpty())
                 continue;
 
@@ -342,7 +356,8 @@ public class Administrador {
         return opcionBorrar;
     }
 
-    public static int iniciarSesion(Scanner scan, String[] usuario, String[] usuariosArray, int[] indice) {
+    public static int iniciarSesion(Scanner scan, String[] usuario, PrintWriter out, BufferedReader in)
+            throws IOException {
         boolean usuarioEncontrado = false;
         String usuarioSesionID, usuarioSesionClave;
         String regex = "\\.-\\.";
@@ -366,18 +381,24 @@ public class Administrador {
             usuarioSesionClave = scan.nextLine();
         } while (usuarioSesionClave.isBlank());
 
-        for (int i = 0; i < indice[0]; i++) {
-            String[] datos = usuariosArray[i].split(regex);
+        out.println("INICIAR_SESION");
+        out.println(usuarioSesionID);
+        out.println(usuarioSesionClave);
 
-            if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
-                usuarioEncontrado = true;
+        String respuesta;
 
-                usuario[2] = datos[0];
-                usuario[0] = datos[1];
-                usuario[1] = datos[2];
+        StringBuilder sb = new StringBuilder();
+        while ((respuesta = in.readLine()) != null) {
+            if (respuesta.equals("=== Fin de consulta ==="))
                 break;
-            }
+            sb.append(respuesta).append("\n");
         }
+        String usuarioStr = sb.toString().trim();
+
+        if (usuarioStr.isBlank())
+            usuarioEncontrado = false;
+        else
+            usuarioEncontrado = true;
 
         Interfaz.imprimirBordeIzqDer();
         Interfaz.imprimirLineaConexion();
@@ -385,6 +406,12 @@ public class Administrador {
         if (usuarioEncontrado) {
             Interfaz.imprimirTextoLineaSalto("Sesion iniciada.");
             Interfaz.imprimirLineaInfIzqDer();
+
+            String[] usuarioDatos = usuarioStr.split(regex);
+
+            usuario[2] = usuarioDatos[0];
+            usuario[0] = usuarioDatos[1];
+            usuario[1] = usuarioDatos[2];
 
             return 0;
         }
@@ -402,5 +429,27 @@ public class Administrador {
         System.out.println();
 
         return opcionIniciarSesion;
+    }
+
+    public static void noAutorizado(String accederA, String perfil) {
+        String tipoPerfil = "";
+
+        if (perfil.toUpperCase().equals("A"))
+            tipoPerfil = "Administrador";
+        else if (perfil.toUpperCase().equals("D"))
+            tipoPerfil = "Docente";
+        else if (perfil.toUpperCase().equals("E"))
+            tipoPerfil = "Estudiante";
+
+        Interfaz.imprimirTitulo("Error");
+
+        Interfaz.imprimirTextoLineaSalto("No puedes acceder a:");
+        Interfaz.imprimirTextoLineaSalto(accederA);
+
+        Interfaz.imprimirTextoLineaSalto("");
+        Interfaz.imprimirTextoLineaSalto("Perfil invalido");
+        Interfaz.imprimirTextoLineaSalto("Tu perfil: " + tipoPerfil);
+
+        Interfaz.imprimirLineaInfIzqDer();
     }
 }

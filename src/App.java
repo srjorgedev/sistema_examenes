@@ -1,266 +1,239 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        String regex = "\\.-\\.";
+        try {
+            String regex = "\\.-\\.";
 
-        // Inicializar arrays
-        String[] usuariosArray = new String[99];
-        String[] historialUsuariosArray = new String[99];
+            Socket socket = new Socket("localhost", 5000);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        String[] cursosArray = new String[100];
-        String[] temasArray = new String[100];
+            // Inicializar arrays
+            String[] usuariosArray = new String[99];
 
-        String[] sesion = {
-                "", // Usuario - ID
-                "", // Usuario - Nombre
-                "", // Usuario - Tipo
-        };
+            String[] cursosArray = new String[100];
+            String[] temasArray = new String[100];
 
-        // Inicializar matriz
-        // Explicacion matriz
-        // [][0] Examen - Informacion
-        // [][1] Examen - Preguntas
-        // [][2] Examen - Reactivos
-        // [][3] Examen - Respuestas
+            String[] sesion = {
+                    "", // Usuario - ID
+                    "", // Usuario - Nombre
+                    "", // Usuario - Tipo
+            };
 
-        String[][] examenMatriz = new String[99][4];
+            // Inicializar matriz
+            // Explicacion matriz
+            // [][0] Examen - Informacion
+            // [][1] Examen - Preguntas
+            // [][2] Examen - Reactivos
+            // [][3] Examen - Respuestas
 
-        int[] indice = {
-                0, // Usuarios
-                0, // Historial usuarios
-                0, // Examen
-                0, // Cursos
-                0, // Temas
-        };
+            String[][] examenMatriz = new String[99][4];
 
-        // Array de uso para el apartado de Docente
+            int[] indice = {
+                    0, // Usuarios
+                    0, // Historial usuarios
+                    0, // Examen
+                    0, // Cursos
+                    0, // Temas
+            };
 
-        // Leer los archivos guardados
-        // String[] usuariosArchivo = FuncionesServidor.leerArchivo("Usuarios");
+            // Instancia del Scanner
+            Scanner scan = new Scanner(System.in);
 
-        Datos.crearUsuarios(usuariosArray, indice);
+            // Variables para gestionar el flujo del sistema
+            int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0,
+                    opcionProfesor = 0, opcionAdministrar = 0, opcionIniciarSesion = 0, opcionBorrar = 0,
+                    opcionCrearExamen = 0;
 
-        // Crear datos de ejemplo
-        Datos.crearExamenes(examenMatriz, indice);
+            while (true) {
+                while (opcionInicio == 0
+                        || !(opcionInicio == 1 || opcionInicio == 2 || opcionInicio == 3 || opcionInicio == 4)) {
+                    System.out.println();
 
-        // Instancia del Scanner
-        Scanner scan = new Scanner(System.in);
+                    Interfaz.imprimirTitulo("Bienvenido al sistema de examenes");
+                    Interfaz.imprimirTextoLineaSalto("Seleccione su usuario:");
+                    Interfaz.imprimirBordeIzqDer();
+                    Interfaz.imprimirTextoLineaSalto("1. Administrador");
+                    Interfaz.imprimirTextoLineaSalto("2. Estudiante");
+                    Interfaz.imprimirTextoLineaSalto("3. Profesor");
+                    Interfaz.imprimirBordeIzqDer();
+                    Interfaz.imprimirTextoLineaSalto("4. Salir del sistema");
+                    Interfaz.imprimirBordeIzqDer();
 
-        // Variables para gestionar el flujo del sistema
-        int opcionInicio = 0, opcionPanel = 0, opcionPanelCrear = 0, opcionAdmin = 0,
-                opcionProfesor = 0, opcionAdministrar = 0, opcionIniciarSesion = 0, opcionBorrar = 0,
-                opcionCrearExamen = 0;
-
-        while (true) {
-            while (opcionInicio == 0
-                    || !(opcionInicio == 1 || opcionInicio == 2 || opcionInicio == 3 || opcionInicio == 4)) {
-                System.out.println();
-
-                Interfaz.imprimirTitulo("Bienvenido al sistema de examenes");
-                Interfaz.imprimirTextoLineaSalto("Seleccione su usuario:");
-                Interfaz.imprimirBordeIzqDer();
-                Interfaz.imprimirTextoLineaSalto("1. Administrador");
-                Interfaz.imprimirTextoLineaSalto("2. Estudiante");
-                Interfaz.imprimirTextoLineaSalto("3. Profesor");
-                Interfaz.imprimirBordeIzqDer();
-                Interfaz.imprimirTextoLineaSalto("4. Salir del sistema");
-                Interfaz.imprimirBordeIzqDer();
-                Interfaz.imprimirLineaInfIzqDer();
-
-                System.out.print("  Ingrese su opcion: ");
-                opcionInicio = scan.nextInt();
-                scan.nextLine();
-
-                System.out.println();
-            }
-            ;
-
-            if (opcionInicio == 4)
-                break;
-
-            while (sesion[0].isEmpty()) {
-
-                opcionIniciarSesion = Administrador.iniciarSesion(scan, sesion, usuariosArray, indice);
-
-                if (opcionIniciarSesion == 2) {
-                    opcionInicio = 0;
-                    opcionIniciarSesion = 0;
-                    break;
-                }
-            }
-
-            switch (opcionInicio) {
-                case 1: {
-                    opcionPanel = Administrador.menuAdmin(scan);
-
-                    if (opcionPanel == 3)
-                        opcionInicio = 0;
-
-                    if (opcionPanel == 1) {
-                        opcionPanelCrear = Administrador.crearUsuario(scan, usuariosArray, indice);
-
-                        if (opcionPanelCrear == 2) {
-                            opcionPanel = 0;
-                            opcionPanelCrear = 0;
-                        }
-
-                        if (opcionPanelCrear == 3) {
-                            opcionInicio = 0;
-                            opcionPanel = 0;
-                            opcionPanelCrear = 0;
-                        }
+                    if (!sesion[0].isEmpty()) {
+                        Interfaz.imprimirTextoLineaSalto("5. Cerrar sesion");
                     }
 
-                    if (opcionPanel == 2) {
-                        opcionAdministrar = Administrador.mostrarUsuarios(scan, usuariosArray, indice);
+                    Interfaz.imprimirLineaInfIzqDer();
 
-                        if (opcionAdministrar == 3) {
-                            opcionPanel = 0;
-                            opcionAdministrar = 0;
+                    System.out.print("  Ingrese su opcion: ");
+                    opcionInicio = scan.nextInt();
+                    scan.nextLine();
+
+                    System.out.println();
+
+                    if (opcionInicio == 5) {
+                        sesion[0] = "";
+                        sesion[1] = "";
+                        sesion[2] = "";
+                    }
+                }
+                ;
+
+                if (opcionInicio == 4)
+                    break;
+
+                while (sesion[0].isEmpty()) {
+                    opcionIniciarSesion = Administrador.iniciarSesion(scan, sesion, out, in);
+
+                    if (opcionIniciarSesion == 2) {
+                        opcionInicio = 0;
+                        opcionIniciarSesion = 0;
+                        break;
+                    }
+                }
+
+                switch (opcionInicio) {
+                    case 1:
+                        if (sesion[2].toUpperCase().equals("A"))
+                            opcionPanel = Administrador.menuAdmin(scan);
+                        else {
+                            Administrador.noAutorizado("Administrador", sesion[2]);
+                            opcionPanel = 3;
                         }
-                        if (opcionAdministrar == 4) {
+
+                        if (opcionPanel == 3)
                             opcionInicio = 0;
-                            opcionPanel = 0;
-                            opcionAdministrar = 0;
+
+                        if (opcionPanel == 1) {
+                            opcionPanelCrear = Administrador.crearUsuario(scan, out, in);
+
+                            if (opcionPanelCrear == 2) {
+                                opcionPanel = 0;
+                                opcionPanelCrear = 0;
+                            }
+
+                            if (opcionPanelCrear == 3) {
+                                opcionInicio = 0;
+                                opcionPanel = 0;
+                                opcionPanelCrear = 0;
+                            }
                         }
 
-                        if (opcionAdministrar == 1) {
-                            opcionAdministrar = Administrador.modificarUsuario(scan, usuariosArray, indice);
-
-                            if (opcionAdministrar == 2) {
-                                opcionInicio = 1;
-                                opcionPanel = 0;
-                                opcionAdministrar = 0;
-                            }
+                        if (opcionPanel == 2) {
+                            opcionAdministrar = Administrador.mostrarUsuarios(scan, out, in);
 
                             if (opcionAdministrar == 3) {
+                                opcionPanel = 0;
+                                opcionAdministrar = 0;
+                            }
+                            if (opcionAdministrar == 4) {
                                 opcionInicio = 0;
                                 opcionPanel = 0;
                                 opcionAdministrar = 0;
                             }
-                        }
 
-                        if (opcionAdministrar == 2) {
-                            opcionBorrar = Administrador.borrarUsuario(scan, usuariosArray, indice);
+                            if (opcionAdministrar == 1) {
+                                opcionAdministrar = Administrador.modificarUsuario(scan, out, in);
 
-                            if (opcionBorrar == 2) {
-                                opcionInicio = 1;
-                                opcionPanel = 0;
-                                opcionBorrar = 0;
-                            }
-                            if (opcionBorrar == 3) {
-                                opcionInicio = 0;
-                                opcionPanel = 0;
-                            }
-                        }
-                    }
-                }
-
-                case 2: {
-                    int opcionEstudiante, opcionAdministrarPerfil;
-
-                    opcionEstudiante = Estudiante.mostrarMenu(scan);
-
-                    switch (opcionEstudiante) {
-                        case 1:
-                            opcionAdministrarPerfil = Estudiante.administrarPerfil(scan);
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                }
-
-                case 3: {
-                    int opcionDocente = 0;
-
-                    opcionDocente = Docente.mostrarPanel(scan);
-
-                    if (opcionDocente == 1) {
-                        opcionCrearExamen = Docente.crearExamen(scan, examenMatriz, sesion, indice);
-
-                        if (opcionCrearExamen == 2) {
-                            opcionInicio = 3;
-                            opcionDocente = 1;
-                            opcionCrearExamen = 0;
-                        }
-                        if (opcionCrearExamen == 3) {
-                            opcionInicio = 0;
-                            opcionDocente = 0;
-                            opcionCrearExamen = 0;
-                        }
-                    }
-
-                    if (opcionDocente == 2) {
-                        int opcionVerExamenes;
-
-                        Interfaz.imprimirTitulo("Examenes creados");
-                        Interfaz.imprimirBordeIzqDer();
-
-                        for (int i = 0; i < indice[2]; i++) {
-                            String[] examenInfo = examenMatriz[i][0].split(regex);
-
-                            if (!(examenInfo[examenInfo.length - 1].equals(sesion[0])) && !sesion[0].equals("0000"))
-                                continue;
-
-                            String[] examenPreguntas = examenMatriz[i][1].split(regex);
-                            String[] examenReactivos = examenMatriz[i][2].split(regex);
-                            String[] examenRespuestas = examenMatriz[i][3].split(regex);
-
-                            String tipo = "";
-                            if (examenInfo[3].toUpperCase().equals("O"))
-                                tipo = "Ordinario";
-                            if (examenInfo[3].toUpperCase().equals("R"))
-                                tipo = "Remedial";
-                            if (examenInfo[3].toUpperCase().equals("E"))
-                                tipo = "Extraordinario";
-
-                            Interfaz.imprimirTextoLineaSalto("Examen: " + examenInfo[0] + " - " + tipo);
-                            Interfaz.imprimirTextoLineaSalto("Creado por: " + examenInfo[5]);
-                            Interfaz.imprimirTextoLineaSalto(examenInfo[1] + " - " + examenInfo[4]);
-
-                            Interfaz.imprimirBordeIzqDer();
-                            Interfaz.imprimirTextoLineaSalto("Preguntas");
-                            Interfaz.imprimirBordeIzqDer();
-
-                            for (int j = 1; j < examenPreguntas.length; j++) {
-                                Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
-                                Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
-
-                                String respuestas = "";
-                                for (int k = 0; k < examenRespuestas[j].length(); k++) {
-                                    if (examenRespuestas[k].isBlank())
-                                        continue;
-
-                                    respuestas += examenRespuestas[j].charAt(k) + ") ";
+                                if (opcionAdministrar == 2) {
+                                    opcionInicio = 1;
+                                    opcionPanel = 0;
+                                    opcionAdministrar = 0;
                                 }
 
-                                Interfaz.imprimirBordeIzqDer();
-                                Interfaz.imprimirTextoLineaSalto("Respuestas");
-                                Interfaz.imprimirTextoLineaSalto(respuestas);
-                                Interfaz.imprimirBordeIzqDer();
+                                if (opcionAdministrar == 3) {
+                                    opcionInicio = 0;
+                                    opcionPanel = 0;
+                                    opcionAdministrar = 0;
+                                }
+
                             }
 
-                            Interfaz.imprimirLineaConexion();
+                            if (opcionAdministrar == 2) {
+                                opcionBorrar = Administrador.borrarUsuario(scan, usuariosArray, indice);
+
+                                if (opcionBorrar == 2) {
+                                    opcionInicio = 1;
+                                    opcionPanel = 0;
+                                    opcionBorrar = 0;
+                                }
+                                if (opcionBorrar == 3) {
+                                    opcionInicio = 0;
+                                    opcionPanel = 0;
+                                }
+                            }
                         }
 
-                        Interfaz.imprimirTextoLineaSalto("Acciones disponibles:");
-                        Interfaz.imprimirBordeIzqDer();
+                        break;
 
-                        Interfaz.imprimirTextoLineaSalto("1. Finalizar examen");
-                        Interfaz.imprimirTextoLineaSalto("2. Borrar examen");
-                        Interfaz.imprimirTextoLineaSalto("3. Volver al panel docente");
-                        Interfaz.imprimirTextoLineaSalto("4. Volver al inicio");
+                    case 2:
+                        int opcionEstudiante, opcionAdministrarPerfil = 0, opcionParticiparExamen = 0;
 
-                        Interfaz.imprimirLineaInfIzqDer();
+                        opcionEstudiante = Estudiante.mostrarMenu(scan);
 
-                        System.out.print("  Ingrese su opcion: ");
-                        opcionVerExamenes = scan.nextInt();
-                        scan.nextLine();
+                        switch (opcionEstudiante) {
+                            case 1:
+                                opcionAdministrarPerfil = Estudiante.administrarPerfil(scan);
+                                break;
 
-                        System.out.println();
+                            case 2:
+                                opcionParticiparExamen = Estudiante.participarExamen(scan, sesion, out, in);
+
+                                if (opcionParticiparExamen == 1) {
+
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        break;
+
+                    case 3:
+                        int opcionDocente = 0;
+
+                        opcionDocente = Docente.mostrarPanel(scan);
+
+                        if (opcionDocente == 1) {
+                            opcionCrearExamen = Docente.crearExamen(scan, sesion, out, in);
+
+                            if (opcionCrearExamen == 2) {
+                                opcionInicio = 3;
+                                opcionDocente = 1;
+                                opcionCrearExamen = 0;
+                            }
+                            if (opcionCrearExamen == 3) {
+                                opcionInicio = 0;
+                                opcionDocente = 0;
+                                opcionCrearExamen = 0;
+                            }
+                        }
+
+                        if (opcionDocente == 2) {
+                            int opcionVerExamenes;
+
+                            opcionVerExamenes = Docente.mostrarExamenes(scan, sesion, out, in);
+
+                            if (opcionVerExamenes == 3) {
+                                opcionInicio = 3;
+                                opcionDocente = 0;
+                                opcionVerExamenes = 0;
+                            }
+
+                            if (opcionVerExamenes == 3) {
+                                opcionInicio = 0;
+                                opcionDocente = 0;
+                                opcionVerExamenes = 0;
+                            }
+                        }
 
                         if (opcionDocente == 3) {
                             System.out.print("Nombre del curso: ");
@@ -287,14 +260,16 @@ public class App {
                                 System.out.println("No hay espacio para más temas.");
                             }
                         }
-                    }
 
-                    if (opcionDocente == 5) {
-                        opcionDocente = 0; // Regresa al inicio
+                        if (opcionDocente == 5) {
+                            opcionDocente = 0; // Regresa al inicio
+                            break;
+                        }
                         break;
-                    }
                 }
             }
+        } catch (IOException e) {
+            System.err.println("Error de conexión: " + e.getMessage());
         }
     }
 } //
