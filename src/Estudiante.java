@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Estudiante {
     public static int mostrarMenu(Scanner scan) {
         int opcionEstudiante = 0;
-
+//F
         while (opcionEstudiante == 0 || !(opcionEstudiante >= 1 && opcionEstudiante <= 5)) {
             Interfaz.imprimirTitulo("Panel de Estudiante");
             Interfaz.imprimirBordeIzqDer();
