@@ -1,170 +1,132 @@
-
-// Servidor.java
+// Importamos librerías para entrada/salida y manejo de sockets
 import java.io.*;
 import java.net.*;
 
 public class Servidor {
+    // Contador para saber cuántos clientes están conectados en este momento
+    private static int clientesConectados = 0;
 
     public static void main(String[] args) {
-        // Inicializar arrays
-        String[] usuariosArray = new String[99];
-        String[] historialUsuariosArray = new String[99];
-
-        String[] cursosArray = new String[100];
-        String[] temasArray = new String[100];
-
-        String regex = "\\.-\\.";
-
-        // Inicializar matriz
-        // Explicacion matriz
-        // [][0] Examen - Informacion
-        // [][1] Examen - Preguntas
-        // [][2] Examen - Reactivos
-        // [][3] Examen - Respuestas
-
-        String[][] examenMatriz = new String[99][4];
-
-        int[] indice = {
-                0, // Usuarios
-                0, // Historial usuarios
-                0, // Examen
-                0, // Cursos
-                0, // Temas
-        };
-
-        Datos.crearUsuarios(usuariosArray, indice);
-        Datos.crearExamenes(examenMatriz, indice);
-
-        try (ServerSocket serverSocket = new ServerSocket(5000)) {
-
+        try (ServerSocket serverSocket = new ServerSocket(5000)) { 
+            // Creamos un ServerSocket escuchando en el puerto 5000
             System.out.println("Servidor iniciado...");
 
+            // Bucle infinito para aceptar conexiones
             while (true) {
+                // Espera a que un cliente se conecte
+                Socket socket = serverSocket.accept();
 
-                try (Socket socket = serverSocket.accept();
-                        BufferedReader entrada = new BufferedReader(
-                                new InputStreamReader(socket.getInputStream()));
-                        PrintWriter salida = new PrintWriter(socket.getOutputStream(), true);) {
-                    // Incrementar y mostrar cuántos clientes hay
+                // Incrementa el contador y muestra cuántos clientes hay
+                clientesConectados++;
+                System.out.println("Nuevo cliente conectado. Clientes activos: " + clientesConectados);
 
-                    System.out.println("Nuevo cliente conectado. Cliente: " + socket.getInetAddress());
+                // Creamos un hilo para manejar al cliente de forma independiente
+                new Thread(() -> {
+                    try (
+                        // Canal de entrada para leer datos del cliente
+                        BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        // Canal de salida para enviar datos al cliente
+                        PrintWriter salida = new PrintWriter(socket.getOutputStream(), true)
+                    ) {
+                        // Leemos el primer comando que manda el cliente
+                        String comando = entrada.readLine();
 
-                    String comando;
+                        // --- Registro de Usuarios ---
+                        if ("REGISTRO_USUARIO".equalsIgnoreCase(comando)) {
+                            // Abrimos el archivo para agregar info de usuario
+                            PrintWriter archivo = new PrintWriter(new FileWriter("Usuarios.txt", true));
+                            archivo.println("===== Nuevo Registro =====");
 
-                    while ((comando = entrada.readLine()) != null) {
-                        System.out.println(
-                                "Nuevo comando recibido desde " + socket.getInetAddress() + ", comando: " + comando);
+                            // Leemos los datos enviados por el cliente hasta que mande una línea vacía
+                            String linea;
+                            while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
+                                archivo.println(linea);
+                            }
+                            archivo.println("---");
+                            archivo.close();
 
-                        switch (comando) {
-                            case "REGISTRO_USUARIO":
-                                Array.agregarUsuario(usuariosArray, entrada.readLine(), indice);
+                            // Confirmación al cliente
+                            salida.println("Usuario guardado correctamente");
 
-                                salida.println("=== Fin de consulta ===");
-                                break;
+                            // Le mandamos todo el archivo de usuarios
+                            BufferedReader lector = new BufferedReader(new FileReader("Usuarios.txt"));
+                            String registro;
+                            while ((registro = lector.readLine()) != null) {
+                                salida.println(registro);
+                            }
+                            lector.close();
 
-                            case "REGISTRO_HISTORIAL":
-                                Array.agregarHistorial(historialUsuariosArray, entrada.readLine(), indice);
-
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "MODIFICAR_USUARIO":
-                                String nuevosDatos = entrada.readLine();
-                                int indiceModificar = Integer.parseInt(entrada.readLine());
-
-                                Array.modificar(usuariosArray, indiceModificar, nuevosDatos);
-                                salida.println("=== Fin de consulta ===");
-
-                                break;
-
-                            case "CREAR_EXAMEN":
-                                String examenInfo = entrada.readLine();
-                                String examenPreguntas = entrada.readLine();
-                                String examenReactivos = entrada.readLine();
-                                String examenRespuestas = entrada.readLine();
-
-                                Array.agregarExamen(examenMatriz, new String[] {
-                                        examenInfo,
-                                        examenPreguntas,
-                                        examenReactivos,
-                                        examenRespuestas
-                                }, indice);
-
-                                salida.println("=== Fin de consulta ===");
-
-                                break;
-
-                            case "INICIAR_SESION":
-                                String usuarioSesionID = entrada.readLine();
-                                String usuarioSesionClave = entrada.readLine();
-                                boolean encontrado = false;
-
-                                for (int i = 0; i < indice[0]; i++) {
-                                    if (usuariosArray[i] == null || usuariosArray[i].isEmpty())
-                                        continue;
-
-                                    String[] datos = usuariosArray[i].split(regex);
-                                    if (datos[1].equals(usuarioSesionID) && datos[3].equals(usuarioSesionClave)) {
-                                        salida.println(usuariosArray[i]);
-                                        encontrado = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!encontrado) {
-                                    salida.println("USUARIO_NO_ENCONTRADO");
-                                }
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "OBTENER_USUARIO_INDICE_ACTUAL":
-                                salida.println(indice[0]);
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "OBTENER_EXAMEN_INDICE_ACTUAL":
-                                salida.println(indice[2]);
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "OBTENER_HISTORIAL":
-                                for (int i = 0; i < indice[0]; i++) {
-                                    salida.println(historialUsuariosArray[i]);
-                                }
-
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "OBTENER_USUARIOS":
-                                for (int i = 0; i < indice[0]; i++) {
-                                    salida.println(usuariosArray[i]);
-                                }
-
-                                salida.println("=== Fin de consulta ===");
-                                break;
-
-                            case "OBTENER_EXAMENES":
-                                for (int i = 0; i < indice[2]; i++) {
-                                    String fila = String.join(";", examenMatriz[i]);
-                                    salida.println(fila);
-                                }
-
-                                salida.println("=== Fin de consulta ===");
-                                break;
-                            default:
-                                break;
+                            salida.println("=== Fin de consulta ===");
                         }
+
+                        // --- Registro de Exámenes ---
+                        if ("REGISTRO_EXAMENES".equalsIgnoreCase(comando)) {
+                            PrintWriter archivoE = new PrintWriter(new FileWriter("Examenes.txt", true));
+                            archivoE.println("===== Nuevo Examen =====");
+
+                            String lineaE;
+                            while ((lineaE = entrada.readLine()) != null && !lineaE.isEmpty()) {
+                                archivoE.println(lineaE);
+                            }
+                            archivoE.println("---");
+                            archivoE.close();
+
+                            salida.println("Examen guardado correctamente");
+
+                            BufferedReader lector = new BufferedReader(new FileReader("Examenes.txt"));
+                            String registro;
+                            while ((registro = lector.readLine()) != null) {
+                                salida.println(registro);
+                            }
+                            lector.close();
+
+                            salida.println("=== Fin de consulta ===");
+                        }
+
+                        // --- Registro de Calificaciones ---
+                        if ("REGISTRO_CALIFICACIONES".equalsIgnoreCase(comando)) {
+                            PrintWriter archivoE = new PrintWriter(new FileWriter("Calificaciones.txt", true));
+                            archivoE.println("===== Calificaciones =====");
+
+                            String linea;
+                            while ((linea = entrada.readLine()) != null && !linea.isEmpty()) {
+                                archivoE.println(linea);
+                            }
+                            archivoE.println("---");
+                            archivoE.close();
+
+                            salida.println("Calificaiones agregadas correctamente");
+
+                            BufferedReader lector = new BufferedReader(new FileReader("Calificaciones.txt"));
+                            String registro;
+                            while ((registro = lector.readLine()) != null) {
+                                salida.println(registro);
+                            }
+                            lector.close();
+
+                            salida.println("=== Fin de consulta ===");
+                        }
+
+                    } catch (IOException e) {
+                        // Por si hay algún error en la conexión con el cliente
+                        System.out.println("Error con cliente: " + e.getMessage());
+                    } finally {
+                        try {
+                            // Cerramos el socket del cliente
+                            socket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        // Disminuimos el contador de clientes
+                        clientesConectados--;
+                        System.out.println("Cliente desconectado. Clientes activos: " + clientesConectados);
                     }
-
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
+                }).start(); // Arrancamos el hilo
             }
 
         } catch (IOException e) {
+            // Si hay un error al iniciar el servidor
             System.out.println("Error en el servidor: " + e.getMessage());
         }
     }
-
 }
