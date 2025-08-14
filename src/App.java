@@ -10,7 +10,7 @@ public class App {
         try {
             String regex = "\\.-\\.";
 
-            Socket socket = new Socket("localhost", 5000);
+            Socket socket = new Socket("192.168.120.8", 5000);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -202,6 +202,9 @@ public class App {
 
                         opcionDocente = Docente.mostrarPanel(scan);
 
+                        if (opcionDocente == 5)
+                            opcionInicio = 0;
+
                         if (opcionDocente == 1) {
                             opcionCrearExamen = Docente.crearExamen(scan, sesion, out, in);
 
@@ -228,7 +231,7 @@ public class App {
                                 opcionVerExamenes = 0;
                             }
 
-                            if (opcionVerExamenes == 3) {
+                            if (opcionVerExamenes == 4) {
                                 opcionInicio = 0;
                                 opcionDocente = 0;
                                 opcionVerExamenes = 0;
@@ -261,10 +264,6 @@ public class App {
                             }
                         }
 
-                        if (opcionDocente == 5) {
-                            opcionDocente = 0; // Regresa al inicio
-                            break;
-                        }
                         break;
                 }
             }

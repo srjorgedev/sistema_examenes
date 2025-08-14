@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Datos {
     public static void crearUsuarios(String[] usuarios, int[] indices) {
         Array.agregarUsuario(usuarios, "A.-.0000.-.admin.-.clave", indices);

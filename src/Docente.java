@@ -1,15 +1,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Docente {
     public static int mostrarPanel(Scanner scan) {
         int opcionDocente = 0;
 
-        while (opcionDocente == 0 || !(opcionDocente == 1 || opcionDocente == 2 || opcionDocente == 3)) {
+        while (opcionDocente == 0 || !(opcionDocente >= 1 && opcionDocente <= 5)) {
             Interfaz.imprimirTitulo("Panel Docente");
             Interfaz.imprimirTextoLineaSalto("1. Crear examen");
             Interfaz.imprimirTextoLineaSalto("2. Ver examenes");
@@ -67,8 +65,8 @@ public class Docente {
         examenInformacion = examenID + ".-." + nombre + ".-." + fecha + ".-." + tipo.toUpperCase()
                 + ".-." + materia + ".-." + usuario[1] + ".-." + usuario[0];
         examenPreguntas += examenID;
-        examenReactivos += examenID;
-        examenRespuestas += examenID;
+        examenReactivos += examenID + ".-.";
+        examenRespuestas += examenID + ".-.";
 
         int preguntaIndice = 1;
 
@@ -96,7 +94,7 @@ public class Docente {
             System.out.print("    Tipo de pregunta: ");
             String tipoExamen = scan.nextLine();
 
-            examenPreguntas += ".-." + tipoExamen + "-" + pregunta;
+            examenPreguntas += ".-." + tipoExamen + " - " + pregunta;
 
             Interfaz.imprimirLineaConexion();
 
@@ -115,7 +113,7 @@ public class Docente {
                 if (respuesta.isEmpty())
                     break;
 
-                examenReactivos += ".-." + reactivos[indiceReactivo] + ")" + respuesta;
+                examenReactivos += reactivos[indiceReactivo] + ")" + respuesta + " ";
                 indiceReactivo++;
             }
 
@@ -140,7 +138,7 @@ public class Docente {
                 String respuesta = scan.nextLine();
 
                 respuestasCorrectas += respuesta;
-                examenRespuestas = examenID + ".-. " + respuesta + ".-.";
+                examenRespuestas += respuesta.trim();
             }
 
             if (tipoExamen.toUpperCase().equals("S")) {
@@ -155,10 +153,10 @@ public class Docente {
                     if (respuesta.isEmpty())
                         break;
 
-                    respuestasCorrectas += respuesta;
+                    respuestasCorrectas += respuesta.trim();
 
                 }
-                examenRespuestas = examenID + ".-. " + respuestasCorrectas + ".-.";
+                examenRespuestas += respuestasCorrectas;
             }
 
             Interfaz.imprimirLineaConexion();
@@ -174,6 +172,11 @@ public class Docente {
             scan.nextLine();
 
             System.out.println();
+
+            if (opcionCrearExamen == 1) {
+                examenReactivos += ".-.";
+                examenRespuestas += ".-.";
+            }
 
             if (opcionCrearExamen == 2)
                 break;
@@ -254,13 +257,15 @@ public class Docente {
             Interfaz.imprimirTextoLineaSalto("Preguntas");
             Interfaz.imprimirBordeIzqDer();
 
+            System.out.println(examenRespuestas.length);
+
             for (int j = 1; j < examenPreguntas.length; j++) {
                 Interfaz.imprimirTextoLineaSalto(examenPreguntas[j]);
                 Interfaz.imprimirTextoLineaSalto(examenReactivos[j]);
 
                 String respuestas = "";
                 for (int k = 0; k < examenRespuestas[j].length(); k++) {
-                    if (examenRespuestas[k].isBlank())
+                    if (examenRespuestas[k].isEmpty())
                         continue;
 
                     respuestas += examenRespuestas[j].charAt(k) + ") ";

@@ -13,7 +13,7 @@ public class Servidor {
         String[] cursosArray = new String[100];
         String[] temasArray = new String[100];
 
-        String regex = "\\.-\\.";
+        String regex = "\\.-\\."; // para separar un texto por cada .-.
 
         // Inicializar matriz
         // Explicacion matriz
@@ -82,6 +82,11 @@ public class Servidor {
                                 String examenPreguntas = entrada.readLine();
                                 String examenReactivos = entrada.readLine();
                                 String examenRespuestas = entrada.readLine();
+
+                                System.out.println(examenInfo);
+                                System.out.println(examenPreguntas);
+                                System.out.println(examenReactivos);
+                                System.out.println(examenRespuestas);
 
                                 Array.agregarExamen(examenMatriz, new String[] {
                                         examenInfo,
