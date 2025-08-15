@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class App {
+public class Cliente {
     public static void main(String[] args) {
         try {
             Socket socket = new Socket("localhost", 5000);
@@ -202,7 +202,7 @@ public class App {
                         break;
 
                     case 3:
-                        int opcionDocente = 0;
+                        int opcionDocente;
 
                         opcionDocente = Docente.mostrarPanel(scan);
 
@@ -243,28 +243,30 @@ public class App {
                         }
 
                         if (opcionDocente == 3) {
-                            System.out.print("Nombre del curso: ");
-                            String nuevoCurso = scan.nextLine();
+                            int opcionCrearCurso = Docente.crearCurso(scan, out, in);
 
-                            if (indice[3] < cursosArray.length) {
-                                cursosArray[indice[3]] = nuevoCurso;
-                                indice[3]++;
-                                System.out.println("Curso agregado correctamente.");
-                            } else {
-                                System.out.println("No hay espacio para más cursos.");
+                            if (opcionCrearCurso == 2) {
+                                opcionInicio = 3;
+                                opcionDocente = 0;
+                            }
+
+                            if (opcionCrearCurso == 3) {
+                                opcionInicio = 0;
+                                opcionDocente = 0;
                             }
                         }
 
                         if (opcionDocente == 4) {
-                            System.out.print("Nombre del tema: ");
-                            String nuevoTema = scan.nextLine();
+                            int opcionCrearTema = Docente.crearTema(scan, out, in);
 
-                            if (indice[4] < temasArray.length) {
-                                temasArray[indice[4]] = nuevoTema;
-                                indice[4]++;
-                                System.out.println("Tema agregado correctamente.");
-                            } else {
-                                System.out.println("No hay espacio para más temas.");
+                            if (opcionCrearTema == 2) {
+                                opcionInicio = 3;
+                                opcionDocente = 0;
+                            }
+
+                            if (opcionCrearTema == 3) {
+                                opcionInicio = 0;
+                                opcionDocente = 0;
                             }
                         }
 

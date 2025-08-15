@@ -146,8 +146,23 @@ public class Servidor {
                                 salida.println("=== Fin de consulta ===");
                                 break;
 
+                            case "OBTENER_CURSO_INDICE_ACTUAL":
+                                salida.println(indice[3]);
+                                salida.println("=== Fin de consulta ===");
+                                break;
+
+                            case "OBTENER_TEMA_INDICE_ACTUAL":
+                                salida.println(indice[4]);
+                                salida.println("=== Fin de consulta ===");
+                                break;
+
                             case "OBTENER_HISTORIAL":
+                                String usuarioID = entrada.readLine();
+
                                 for (int i = 0; i < indice[0]; i++) {
+                                    if (!historialUsuariosArray[i].contains(usuarioID))
+                                        continue;
+
                                     salida.println(historialUsuariosArray[i]);
                                 }
 
@@ -165,6 +180,28 @@ public class Servidor {
                                 salida.println("=== Fin de consulta ===");
                                 break;
 
+                            case "OBTENER_CURSOS":
+                                for (int i = 0; i < indice[3]; i++) {
+                                    if (cursosArray[i].isEmpty())
+                                        continue;
+
+                                    salida.println(cursosArray[i]);
+                                }
+
+                                salida.println("=== Fin de consulta ===");
+                                break;
+
+                            case "OBTENER_TEMAS":
+                                for (int i = 0; i < indice[4]; i++) {
+                                    if (temasArray[i].isEmpty())
+                                        continue;
+
+                                    salida.println(temasArray[i]);
+                                }
+
+                                salida.println("=== Fin de consulta ===");
+                                break;
+
                             case "OBTENER_EXAMENES":
                                 for (int i = 0; i < indice[2]; i++) {
                                     String fila = String.join(";", examenMatriz[i]);
@@ -173,6 +210,19 @@ public class Servidor {
 
                                 salida.println("=== Fin de consulta ===");
                                 break;
+
+                            case "CREAR_CURSO":
+                                Array.agregarCurso(cursosArray, entrada.readLine(), indice);
+                                salida.println("=== Fin de consulta ===");
+
+                                break;
+
+                            case "CREAR_TEMA":
+                                Array.agregarTema(temasArray, entrada.readLine(), indice);
+                                salida.println("=== Fin de consulta ===");
+
+                                break;
+
                             default:
                                 break;
                         }

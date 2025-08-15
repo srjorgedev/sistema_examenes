@@ -18,6 +18,16 @@ public class Array {
         indices[1]++;
     }
 
+    public static void agregarCurso(String[] array, String datos, int[] indices) {
+        array[indices[3]] = datos;
+        indices[3]++;
+    }
+
+    public static void agregarTema(String[] array, String datos, int[] indices) {
+        array[indices[4]] = datos;
+        indices[4]++;
+    }
+
     public static void agregar(String[] array, int indice, String datos) {
         array[indice] = datos;
     }

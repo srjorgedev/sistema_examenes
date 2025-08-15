@@ -298,4 +298,96 @@ public class Docente {
 
         return opcionVerExamenes;
     }
+
+    public static int crearCurso(Scanner scan, PrintWriter out, BufferedReader in)
+            throws IOException {
+
+        int opcionCrearCursos = 0;
+
+        while (opcionCrearCursos == 0 || opcionCrearCursos == 1
+                || !(opcionCrearCursos >= 2 || opcionCrearCursos <= 3)) {
+            String cursoIndiceActual = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_CURSO_INDICE_ACTUAL");
+            String cursoID = "C" + " ".repeat(4 - cursoIndiceActual.length()) + cursoIndiceActual;
+            String curso;
+
+            Interfaz.imprimirTitulo("Crear Curso");
+            Interfaz.imprimirBordeIzqDer();
+
+            do {
+                System.out.print("    Nombre: ");
+                curso = scan.nextLine();
+            } while (curso.isBlank());
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirLineaConexion();
+
+            Interfaz.imprimirTextoLineaSalto("Curso - " + curso + " - creado.");
+
+            Interfaz.imprimirLineaConexion();
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Acciones dispinibles:");
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("1. Crear otro curso");
+            Interfaz.imprimirTextoLineaSalto("2. Volver al panel docente");
+            Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+            Interfaz.imprimirLineaInfIzqDer();
+
+            FuncionesServidor.subirAlServidor(out, in, "CREAR_CURSO", cursoID + ".-." + curso);
+
+            System.out.print("  Ingrese su opcion: ");
+            opcionCrearCursos = scan.nextInt();
+            scan.nextLine();
+
+            System.out.println();
+        }
+
+        return opcionCrearCursos;
+    }
+
+    public static int crearTema(Scanner scan, PrintWriter out, BufferedReader in)
+            throws IOException {
+
+        int opcionCrearCursos = 0;
+
+        while (opcionCrearCursos == 0 || opcionCrearCursos == 1
+                || !(opcionCrearCursos >= 2 || opcionCrearCursos <= 3)) {
+            String cursoIndiceActual = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_TEMA_INDICE_ACTUAL");
+            String cursoID = "T" + " ".repeat(4 - cursoIndiceActual.length()) + cursoIndiceActual;
+            String curso;
+
+            Interfaz.imprimirTitulo("Crear Tema");
+            Interfaz.imprimirBordeIzqDer();
+
+            do {
+                System.out.print("    Nombre: ");
+                curso = scan.nextLine();
+            } while (curso.isBlank());
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirLineaConexion();
+
+            Interfaz.imprimirTextoLineaSalto("Tema - " + curso + " - creado.");
+
+            Interfaz.imprimirLineaConexion();
+
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Acciones dispinibles:");
+            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("1. Crear otro tema");
+            Interfaz.imprimirTextoLineaSalto("2. Volver al panel docente");
+            Interfaz.imprimirTextoLineaSalto("3. Volver al inicio");
+            Interfaz.imprimirLineaInfIzqDer();
+
+            FuncionesServidor.subirAlServidor(out, in, "CREAR_TEMA", cursoID + ".-." + curso);
+
+            System.out.print("  Ingrese su opcion: ");
+            opcionCrearCursos = scan.nextInt();
+            scan.nextLine();
+
+            System.out.println();
+        }
+
+        return opcionCrearCursos;
+    }
 }
