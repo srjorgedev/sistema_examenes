@@ -133,6 +133,9 @@ public class Servidor {
                                 if (!encontrado) {
                                     salida.println("USUARIO_NO_ENCONTRADO");
                                 }
+
+                                System.out.println("Sesion inciada, usuario: " + usuarioSesionID);
+
                                 salida.println("=== Fin de consulta ===");
                                 break;
 
