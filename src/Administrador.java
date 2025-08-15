@@ -265,10 +265,14 @@ public class Administrador {
         return opcionAdministrar;
     }
 
-    public static int borrarUsuario(Scanner scan, String[] usuariosArray, int[] indices) {
+    public static int borrarUsuario(Scanner scan, PrintWriter out, BufferedReader in) throws IOException {
         int indiceBorrar = 0, borrarOpcion = 0, opcionBorrar = 0;
         String regex = "\\.-\\.";
         String idBorrar;
+        String usuarioBorrar = "";
+
+        String usuarios = FuncionesServidor.obtenerDelServidor(out, in, "OBTENER_USUARIOS");
+        String[] usuariosArray = usuarios.split("\n");
 
         Interfaz.imprimirTitulo("Borrar Usuario");
 
@@ -289,6 +293,7 @@ public class Administrador {
 
             if (datos[1].equals(idBorrar)) {
                 usuarioEncontrado = true;
+                usuarioBorrar = usuariosArray[i];
                 break;
             }
         }
@@ -316,7 +321,7 @@ public class Administrador {
             Interfaz.imprimirLineaSupIzqDer();
 
             if (borrarOpcion == 1) {
-                Array.borrar(usuariosArray, indiceBorrar);
+                FuncionesServidor.subirAlServidor(out, in, "ELIMINAR_USUARIO", usuarioBorrar);
                 Interfaz.imprimirTextoLineaSalto("Usuario borrado correctamente.");
             } else if (borrarOpcion == 2) {
                 Interfaz.imprimirTextoLineaSalto("Accion cancelada.");
@@ -412,6 +417,7 @@ public class Administrador {
             usuario[2] = usuarioDatos[0];
             usuario[0] = usuarioDatos[1];
             usuario[1] = usuarioDatos[2];
+            usuario[3] = usuarioSesionClave;
 
             return 0;
         }

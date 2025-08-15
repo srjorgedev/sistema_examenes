@@ -77,6 +77,20 @@ public class Servidor {
 
                                 break;
 
+                            case "ELIMINAR_USUARIO":
+                                String usuarioBorrar = entrada.readLine();
+
+                                for (int i = 0; i < usuariosArray.length; i++) {
+                                    if (usuariosArray[i].equals(usuarioBorrar)) {
+                                        Array.borrar(usuariosArray, i);
+                                        break;
+                                    }
+                                }
+
+                                salida.println("=== Fin de consulta ===");
+
+                                break;
+
                             case "CREAR_EXAMEN":
                                 String examenInfo = entrada.readLine();
                                 String examenPreguntas = entrada.readLine();
@@ -142,6 +156,9 @@ public class Servidor {
 
                             case "OBTENER_USUARIOS":
                                 for (int i = 0; i < indice[0]; i++) {
+                                    if (usuariosArray[i].isEmpty())
+                                        continue;
+
                                     salida.println(usuariosArray[i]);
                                 }
 

@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class Estudiante {
     public static int mostrarMenu(Scanner scan) {
         int opcionEstudiante = 0;
-//F
-        while (opcionEstudiante == 0 || !(opcionEstudiante >= 1 && opcionEstudiante <= 5)) {
+        // F
+        while (opcionEstudiante == 0 || !(opcionEstudiante >= 1 || opcionEstudiante <= 5)) {
             Interfaz.imprimirTitulo("Panel de Estudiante");
             Interfaz.imprimirBordeIzqDer();
 
@@ -33,13 +33,21 @@ public class Estudiante {
         return opcionEstudiante;
     }
 
-    public static int administrarPerfil(Scanner scan) {
+    public static int administrarPerfil(Scanner scan, String[] usuario, PrintWriter out, BufferedReader in)
+            throws IOException {
         int opcionAdministrarPerfil = 0;
 
-        while (opcionAdministrarPerfil == 0 || !(opcionAdministrarPerfil >= 1 && opcionAdministrarPerfil <= 3)) {
+        while (opcionAdministrarPerfil == 0 || !(opcionAdministrarPerfil >= 1 || opcionAdministrarPerfil <= 3)) {
             Interfaz.imprimirTitulo("Administrar Perfil");
 
-            Interfaz.imprimirBordeIzqDer();
+            Interfaz.imprimirTextoLineaSalto("Datos");
+            Interfaz.imprimirTextoLineaSalto("ID: " + usuario[0]);
+            Interfaz.imprimirTextoLineaSalto("Perfil: " + usuario[2]);
+            Interfaz.imprimirTextoLineaSalto("Nombre: " + usuario[1]);
+            Interfaz.imprimirTextoLineaSalto("Clave: " + usuario[3]);
+
+            Interfaz.imprimirLineaConexion();
+
             Interfaz.imprimirTextoLineaSalto("Acciones disponibles: ");
             Interfaz.imprimirTextoLineaSalto("1. Modificar datos");
             Interfaz.imprimirTextoLineaSalto("2. Volver al panel de estudiante");
@@ -174,7 +182,7 @@ public class Estudiante {
         }
 
         String historial = usuario[0] + ".-." + examenInfo[0];
-        String responderExamen = FuncionesServidor.subirAlServidor(out, in, "REGISTRO_HISTORIAL", historial);
+        FuncionesServidor.subirAlServidor(out, in, "REGISTRO_HISTORIAL", historial);
 
         Interfaz.imprimirLineaConexion();
         Interfaz.imprimirTextoLineaSalto("Examen contestado");

@@ -8,14 +8,11 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         try {
-            String regex = "\\.-\\.";
-
-            Socket socket = new Socket("192.168.120.8", 5000);
+            Socket socket = new Socket("localhost", 5000);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // Inicializar arrays
-            String[] usuariosArray = new String[99];
 
             String[] cursosArray = new String[100];
             String[] temasArray = new String[100];
@@ -24,16 +21,8 @@ public class App {
                     "", // Usuario - ID
                     "", // Usuario - Nombre
                     "", // Usuario - Tipo
+                    "", // Usuario - CLave
             };
-
-            // Inicializar matriz
-            // Explicacion matriz
-            // [][0] Examen - Informacion
-            // [][1] Examen - Preguntas
-            // [][2] Examen - Reactivos
-            // [][3] Examen - Respuestas
-
-            String[][] examenMatriz = new String[99][4];
 
             int[] indice = {
                     0, // Usuarios
@@ -82,6 +71,7 @@ public class App {
                         sesion[0] = "";
                         sesion[1] = "";
                         sesion[2] = "";
+                        sesion[3] = "";
                     }
                 }
                 ;
@@ -157,7 +147,7 @@ public class App {
                             }
 
                             if (opcionAdministrar == 2) {
-                                opcionBorrar = Administrador.borrarUsuario(scan, usuariosArray, indice);
+                                opcionBorrar = Administrador.borrarUsuario(scan, out, in);
 
                                 if (opcionBorrar == 2) {
                                     opcionInicio = 1;
@@ -180,18 +170,32 @@ public class App {
 
                         switch (opcionEstudiante) {
                             case 1:
-                                opcionAdministrarPerfil = Estudiante.administrarPerfil(scan);
+                                opcionAdministrarPerfil = Estudiante.administrarPerfil(scan, sesion, out, in);
+
                                 break;
 
                             case 2:
                                 opcionParticiparExamen = Estudiante.participarExamen(scan, sesion, out, in);
 
-                                if (opcionParticiparExamen == 1) {
+                                if (opcionParticiparExamen == 2) {
+                                    opcionInicio = 2;
+                                    opcionEstudiante = 0;
+                                    opcionParticiparExamen = 0;
+                                }
 
+                                if (opcionParticiparExamen == 3) {
+                                    opcionInicio = 2;
+                                    opcionEstudiante = 0;
+                                    opcionParticiparExamen = 0;
                                 }
                                 break;
-
-                            default:
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                opcionInicio = 0;
+                                opcionEstudiante = 0;
                                 break;
                         }
 
